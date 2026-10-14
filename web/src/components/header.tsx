@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { Icon, Logo } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
+import { ease } from "@/components/motion";
 
 function LanguageSwitch() {
   const t = useTranslations("Header");
@@ -36,6 +38,13 @@ export default function Header() {
   const router = useRouter();
   const { cartCount } = useShop();
   const [menu, setMenu] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const { scrollY } = useScroll();
+  // Hide while scrolling down past the hero, show again as soon as the user scrolls up.
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    setHidden(y > previous && y > 240 && !menu);
+  });
   const navTo = (href: string) => {
     router.push(href);
     setMenu(false);
@@ -43,7 +52,11 @@ export default function Header() {
   return (
     <>
       <div className="announcement">{t("announcement")}</div>
-      <header className="header">
+      <motion.header
+        className="header"
+        animate={{ y: hidden ? "-100%" : "0%" }}
+        transition={{ duration: 0.35, ease }}
+      >
         <Logo />
         <nav className={menu ? "nav nav--open" : "nav"}>
           <button onClick={() => navTo("/shop")}>{t("nav.shop")}</button>
@@ -83,7 +96,7 @@ export default function Header() {
             <Icon name={menu ? "close" : "menu"} />
           </button>
         </div>
-      </header>
+      </motion.header>
     </>
   );
 }

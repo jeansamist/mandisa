@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { Button, Icon } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
 import { useSiteImage } from "@/components/site-data-provider";
+import { AnimatePresence } from "motion/react";
+import { Collapse, Reveal, stagger } from "@/components/motion";
 
 export type InfoPage = "care" | "delivery" | "about";
 
@@ -25,31 +27,33 @@ export function InfoView({ type }: { type: InfoPage }) {
   return (
     <main className="page">
       <section className="info-hero container">
-        <div>
+        <Reveal>
           <span className="eyebrow">{tPage("eyebrow")}</span>
           <h1>{tPage("title")}</h1>
           <p>{tPage("intro")}</p>
-        </div>
-        <img src={image(`info.${type}`)} alt="" />
+        </Reveal>
+        <Reveal delay={0.15} y={40}>
+          <img src={image(`info.${type}`)} alt="" />
+        </Reveal>
       </section>
       <section className="container info-list">
         {infoItems[type].map((key, i) => (
-          <article key={key}>
+          <Reveal as="article" key={key} delay={stagger(i, 2)}>
             <span>0{i + 1}</span>
             <div>
               <h2>{tPage(`items.${key}.title`)}</h2>
               <p>{tPage(`items.${key}.text`)}</p>
             </div>
-          </article>
+          </Reveal>
         ))}
       </section>
-      <section className="cta-band">
+      <Reveal as="section" className="cta-band">
         <h2>{type === "care" ? t("cta.careTitle") : t("cta.defaultTitle")}</h2>
         <p>{t("cta.copy")}</p>
         <Button variant="light" onClick={() => setAssistantOpen(true)}>
           {t("cta.button")}
         </Button>
-      </section>
+      </Reveal>
     </main>
   );
 }
@@ -83,22 +87,28 @@ export function FaqView() {
       </div>
       <div className="faq-list">
         {faqQuestions.map((key, i) => (
-          <article key={key}>
+          <Reveal as="article" key={key} delay={stagger(i, 9, 0.05)} y={16}>
             <button onClick={() => setOpen(open === i ? -1 : i)}>
               <h3>{t(`questions.${key}`)}</h3>
               <Icon name={open === i ? "minus" : "plus"} />
             </button>
-            {open === i && <p>{t("answer")}</p>}
-          </article>
+            <AnimatePresence initial={false}>
+              {open === i && (
+                <Collapse>
+                  <p>{t("answer")}</p>
+                </Collapse>
+              )}
+            </AnimatePresence>
+          </Reveal>
         ))}
       </div>
-      <div className="help-banner">
+      <Reveal className="help-banner">
         <section>
           <span className="eyebrow eyebrow--light">{t("help.eyebrow")}</span>
           <h2>{t("help.title")}</h2>
         </section>
         <Button variant="light">{t("help.cta")}</Button>
-      </div>
+      </Reveal>
     </main>
   );
 }
@@ -121,17 +131,22 @@ export function ContactView() {
         </div>
       </div>
       <div className="contact-grid">
-        {channels.map(([label, value]) => (
-          <article key={label}>
+        {channels.map(([label, value], i) => (
+          <Reveal
+            as="article"
+            key={label}
+            delay={stagger(i)}
+            whileHover={{ y: -6 }}
+          >
             <span>{label}</span>
             <h2>{value}</h2>
             <button>
               {t("cta")} <Icon name="arrow" />
             </button>
-          </article>
+          </Reveal>
         ))}
       </div>
-      <section className="contact-form">
+      <Reveal as="section" className="contact-form">
         <div>
           <span className="eyebrow">{t("pickup.eyebrow")}</span>
           <h2>{t.rich("pickup.address", { br: () => <br /> })}</h2>
@@ -154,7 +169,7 @@ export function ContactView() {
           </label>
           <Button>{t("form.submit")}</Button>
         </form>
-      </section>
+      </Reveal>
     </main>
   );
 }

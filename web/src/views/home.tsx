@@ -8,6 +8,13 @@ import { Button, Icon, SectionTitle } from "@/components/ui";
 import { ChatPreview } from "@/components/assistant";
 import ProductCard from "@/components/product-card";
 import { useShop } from "@/components/shop-provider";
+import {
+  MouseLayer,
+  MouseParallaxArea,
+  ParallaxImg,
+  Reveal,
+  stagger,
+} from "@/components/motion";
 
 const trustKeys = [
   "readyToWear",
@@ -28,35 +35,45 @@ export default function HomeView() {
   const image = useSiteImage();
   return (
     <main>
-      <section className="hero">
-        <img src={image("hero")} alt={t("hero.imageAlt")} />
+      <MouseParallaxArea className="hero">
+        <ParallaxImg
+          src={image("hero")}
+          alt={t("hero.imageAlt")}
+          distance={70}
+          mouseDepth={-24}
+          scale={1.18}
+        />
         <div className="hero__shade" />
-        <div className="hero__copy">
-          <span className="eyebrow eyebrow--light">{t("hero.eyebrow")}</span>
+        <MouseLayer className="hero__copy" depth={14}>
+          <Reveal as="span" className="eyebrow eyebrow--light" delay={0.1}>
+            {t("hero.eyebrow")}
+          </Reveal>
           {/* The slogan is never translated. */}
-          <h1>
+          <Reveal as="h1" delay={0.2} y={40}>
             Made to look
             <br />
             <em>like you.</em>
-          </h1>
-          <p>{t("hero.intro")}</p>
-          <div className="button-row">
+          </Reveal>
+          <Reveal as="p" delay={0.35}>
+            {t("hero.intro")}
+          </Reveal>
+          <Reveal className="button-row" delay={0.5}>
             <Button variant="light" onClick={() => router.push("/shop")}>
               {t("hero.cta")} <Icon name="arrow" />
             </Button>
             <Button variant="outline" onClick={() => setAssistantOpen(true)}>
               {t("hero.advice")}
             </Button>
-          </div>
-        </div>
+          </Reveal>
+        </MouseLayer>
         <span className="hero__caption">{t("hero.caption")}</span>
-      </section>
+      </MouseParallaxArea>
       <section className="trust-strip">
         {trustKeys.map((key, i) => (
-          <div key={key}>
+          <Reveal key={key} delay={stagger(i)} y={16}>
             <span>0{i + 1}</span>
             <b>{t(`trust.${key}`)}</b>
-          </div>
+          </Reveal>
         ))}
       </section>
       <section className="section container">
@@ -69,11 +86,14 @@ export default function HomeView() {
           {textures.map((texture, i) => {
             const name = tCatalog(`textures.${texture}`);
             return (
-              <article
+              <Reveal
+                as="article"
                 className={`texture-card texture-card--${i + 1}`}
                 key={texture}
+                delay={stagger(i)}
+                y={48}
               >
-                <img
+                <ParallaxImg
                   src={image(`texture.${texture}`)}
                   alt={t("textures.imageAlt", { name })}
                 />
@@ -85,7 +105,7 @@ export default function HomeView() {
                     {t("textures.cta")} <Icon name="arrow" />
                   </button>
                 </div>
-              </article>
+              </Reveal>
             );
           })}
         </div>
@@ -98,38 +118,38 @@ export default function HomeView() {
             copy={t("collection.copy")}
           />
           <div className="product-grid product-grid--feature">
-            {products.slice(0, 4).map((p) => (
-              <ProductCard key={p.code} product={p} />
+            {products.slice(0, 4).map((p, i) => (
+              <ProductCard key={p.code} product={p} index={i} />
             ))}
           </div>
-          <div className="center">
+          <Reveal className="center">
             <Button variant="outline" onClick={() => router.push("/shop")}>
               {t("collection.cta")} <Icon name="arrow" />
             </Button>
-          </div>
+          </Reveal>
         </div>
       </section>
       <section className="manifesto">
         <div className="container">
-          <span className="eyebrow eyebrow--light">
+          <Reveal as="span" className="eyebrow eyebrow--light">
             {t("manifesto.eyebrow")}
-          </span>
-          <h2>
+          </Reveal>
+          <Reveal as="h2" delay={0.1} y={40}>
             {t.rich("manifesto.title", { em: (chunks) => <em>{chunks}</em> })}
-          </h2>
+          </Reveal>
           <div className="pillars">
             {pillarKeys.map((key, i) => (
-              <article key={key}>
+              <Reveal as="article" key={key} delay={stagger(i)}>
                 <span>0{i + 1}</span>
                 <h3>{t(`manifesto.pillars.${key}.title`)}</h3>
                 <p>{t(`manifesto.pillars.${key}.text`)}</p>
-              </article>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
       <section className="section container advisor">
-        <div className="advisor__copy">
+        <Reveal className="advisor__copy">
           <span className="eyebrow">{t("advisor.eyebrow")}</span>
           <h2>{t("advisor.title")}</h2>
           <p>{t("advisor.copy")}</p>
@@ -141,33 +161,37 @@ export default function HomeView() {
           <Button onClick={() => setAssistantOpen(true)}>
             {t("advisor.cta")} <Icon name="arrow" />
           </Button>
-        </div>
+        </Reveal>
         <ChatPreview />
       </section>
       <section className="section container how">
         <SectionTitle eyebrow={t("how.eyebrow")} title={t("how.title")} />
         <div className="steps">
           {stepKeys.map((key, i) => (
-            <article key={key}>
+            <Reveal as="article" key={key} delay={stagger(i)}>
               <b>0{i + 1}</b>
               <h3>{t(`how.steps.${key}.title`)}</h3>
               <p>{t(`how.steps.${key}.text`)}</p>
-            </article>
+            </Reveal>
           ))}
         </div>
       </section>
-      <section className="care-banner container">
-        <img src={image("careBanner")} alt={t("care.imageAlt")} />
-        <div>
+      <Reveal as="section" className="care-banner container" y={48}>
+        <ParallaxImg
+          src={image("careBanner")}
+          alt={t("care.imageAlt")}
+          distance={60}
+        />
+        <Reveal delay={0.15}>
           <span className="eyebrow">{t("care.eyebrow")}</span>
           <h2>{t("care.title")}</h2>
           <p>{t("care.copy")}</p>
           <Button variant="light" onClick={() => router.push("/care")}>
             {t("care.cta")} <Icon name="arrow" />
           </Button>
-        </div>
-      </section>
-      <section className="newsletter">
+        </Reveal>
+      </Reveal>
+      <Reveal as="section" className="newsletter">
         <div>
           <span className="eyebrow">{t("newsletter.eyebrow")}</span>
           <h2>{t("newsletter.title")}</h2>
@@ -180,7 +204,7 @@ export default function HomeView() {
           <Button>{t("newsletter.submit")}</Button>
           <small>{t("newsletter.consent")}</small>
         </form>
-      </section>
+      </Reveal>
     </main>
   );
 }

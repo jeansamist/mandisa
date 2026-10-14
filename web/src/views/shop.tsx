@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { textures, type Texture } from "@/lib/catalog";
 import { useCatalog } from "@/components/site-data-provider";
+import { Reveal } from "@/components/motion";
 import { Button, Icon } from "@/components/ui";
 import ProductCard from "@/components/product-card";
 import { useShop } from "@/components/shop-provider";
@@ -25,11 +26,11 @@ export default function ShopView() {
         {tCommon("home")} / <b>{tCommon("shop")}</b>
       </div>
       <div className="page-heading">
-        <div>
+        <Reveal>
           <span className="eyebrow">{t("eyebrow")}</span>
           <h1>{t("title")}</h1>
           <p>{t("intro", { count: products.length })}</p>
-        </div>
+        </Reveal>
         <div className="collection-number">
           {String(products.length).padStart(2, "0")} <span>{t("models")}</span>
         </div>
@@ -57,8 +58,8 @@ export default function ShopView() {
           ))}
         </aside>
         <div className="product-grid">
-          {visible.map((p) => (
-            <ProductCard key={p.code} product={p} />
+          {visible.map((p, i) => (
+            <ProductCard key={p.code} product={p} index={i} />
           ))}
         </div>
       </div>
@@ -68,7 +69,7 @@ export default function ShopView() {
           <p>{t("empty.copy")}</p>
         </div>
       )}
-      <div className="help-banner">
+      <Reveal className="help-banner">
         <div>
           <Icon name="sparkle" />
         </div>
@@ -80,7 +81,7 @@ export default function ShopView() {
         <Button variant="light" onClick={() => setAssistantOpen(true)}>
           {t("help.cta")}
         </Button>
-      </div>
+      </Reveal>
     </main>
   );
 }

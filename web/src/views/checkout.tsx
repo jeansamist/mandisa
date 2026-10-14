@@ -6,6 +6,8 @@ import { useRouter } from "@/i18n/navigation";
 import { useFormatPrice } from "@/lib/format";
 import { Button, Icon, Logo } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
+import { AnimatePresence, motion } from "motion/react";
+import { ease } from "@/components/motion";
 import { useCatalog } from "@/components/site-data-provider";
 
 const stepKeys = ["info", "delivery", "payment"] as const;
@@ -51,119 +53,139 @@ export default function CheckoutView() {
       </div>
       <div className="checkout-layout">
         <section className="checkout-form">
-          {step === 1 && (
-            <>
-              {stepLabel}
-              <h1>{t("info.title")}</h1>
-              <div className="choice">
-                <button className="active">{t("info.guest")}</button>
-                <button>{t("info.createAccount")}</button>
-              </div>
-              <div className="form-grid">
-                <label>
-                  {t("info.firstName")}
-                  <input placeholder={t("info.firstNamePlaceholder")} />
-                </label>
-                <label>
-                  {t("info.lastName")}
-                  <input placeholder={t("info.lastNamePlaceholder")} />
-                </label>
-                <label>
-                  {t("info.phone")}
-                  <input placeholder={t("info.phonePlaceholder")} />
-                </label>
-                <label>
-                  {t("info.email")}
-                  <input
-                    type="email"
-                    placeholder={t("info.emailPlaceholder")}
-                  />
-                </label>
-              </div>
-              <Button onClick={() => setStep(2)}>
-                {t("info.next")} <Icon name="arrow" />
-              </Button>
-            </>
-          )}
-          {step === 2 && (
-            <>
-              {stepLabel}
-              <h1>{t("delivery.title")}</h1>
-              <div className="radio-cards">
-                {deliveryKeys.map((key, i) => (
-                  <button className={i === 0 ? "selected" : ""} key={key}>
-                    <i />{" "}
-                    <span>
-                      <b>{t(`delivery.options.${key}.title`)}</b>
-                      <small>{t(`delivery.options.${key}.detail`)}</small>
-                    </span>
-                  </button>
-                ))}
-              </div>
-              <div className="form-grid">
-                <label>
-                  {t("delivery.district")}
-                  <input placeholder={t("delivery.districtPlaceholder")} />
-                </label>
-                <label>
-                  {t("delivery.landmark")}
-                  <input placeholder={t("delivery.landmarkPlaceholder")} />
-                </label>
-                <label className="wide">
-                  {t("delivery.address")}
-                  <input placeholder={t("delivery.addressPlaceholder")} />
-                </label>
-              </div>
-              <div className="button-row">
-                <Button variant="outline" onClick={() => setStep(1)}>
-                  {tCommon("back")}
+          <AnimatePresence mode="wait" initial={false}>
+            {step === 1 && (
+              <motion.div
+                key="step-1"
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.3, ease }}
+              >
+                {stepLabel}
+                <h1>{t("info.title")}</h1>
+                <div className="choice">
+                  <button className="active">{t("info.guest")}</button>
+                  <button>{t("info.createAccount")}</button>
+                </div>
+                <div className="form-grid">
+                  <label>
+                    {t("info.firstName")}
+                    <input placeholder={t("info.firstNamePlaceholder")} />
+                  </label>
+                  <label>
+                    {t("info.lastName")}
+                    <input placeholder={t("info.lastNamePlaceholder")} />
+                  </label>
+                  <label>
+                    {t("info.phone")}
+                    <input placeholder={t("info.phonePlaceholder")} />
+                  </label>
+                  <label>
+                    {t("info.email")}
+                    <input
+                      type="email"
+                      placeholder={t("info.emailPlaceholder")}
+                    />
+                  </label>
+                </div>
+                <Button onClick={() => setStep(2)}>
+                  {t("info.next")} <Icon name="arrow" />
                 </Button>
-                <Button onClick={() => setStep(3)}>
-                  {t("delivery.next")} <Icon name="arrow" />
-                </Button>
-              </div>
-            </>
-          )}
-          {step === 3 && (
-            <>
-              {stepLabel}
-              <h1>{t("payment.title")}</h1>
-              <div className="radio-cards payment">
-                {paymentKeys.map((key) => (
-                  <button
-                    className={payment === key ? "selected" : ""}
-                    onClick={() => setPayment(key)}
-                    key={key}
-                  >
-                    <i />
-                    <span>
-                      <b>{t(`payment.methods.${key}.title`)}</b>
-                      <small>{t(`payment.methods.${key}.detail`)}</small>
-                    </span>
-                  </button>
-                ))}
-              </div>
-              {payment === "transfer" && (
-                <label>
-                  {t("payment.reference")}
-                  <input placeholder={t("payment.referencePlaceholder")} />
+              </motion.div>
+            )}
+            {step === 2 && (
+              <motion.div
+                key="step-2"
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.3, ease }}
+              >
+                {stepLabel}
+                <h1>{t("delivery.title")}</h1>
+                <div className="radio-cards">
+                  {deliveryKeys.map((key, i) => (
+                    <button className={i === 0 ? "selected" : ""} key={key}>
+                      <i />{" "}
+                      <span>
+                        <b>{t(`delivery.options.${key}.title`)}</b>
+                        <small>{t(`delivery.options.${key}.detail`)}</small>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <div className="form-grid">
+                  <label>
+                    {t("delivery.district")}
+                    <input placeholder={t("delivery.districtPlaceholder")} />
+                  </label>
+                  <label>
+                    {t("delivery.landmark")}
+                    <input placeholder={t("delivery.landmarkPlaceholder")} />
+                  </label>
+                  <label className="wide">
+                    {t("delivery.address")}
+                    <input placeholder={t("delivery.addressPlaceholder")} />
+                  </label>
+                </div>
+                <div className="button-row">
+                  <Button variant="outline" onClick={() => setStep(1)}>
+                    {tCommon("back")}
+                  </Button>
+                  <Button onClick={() => setStep(3)}>
+                    {t("delivery.next")} <Icon name="arrow" />
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+            {step === 3 && (
+              <motion.div
+                key="step-3"
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.3, ease }}
+              >
+                {stepLabel}
+                <h1>{t("payment.title")}</h1>
+                <div className="radio-cards payment">
+                  {paymentKeys.map((key) => (
+                    <button
+                      className={payment === key ? "selected" : ""}
+                      onClick={() => setPayment(key)}
+                      key={key}
+                    >
+                      <i />
+                      <span>
+                        <b>{t(`payment.methods.${key}.title`)}</b>
+                        <small>{t(`payment.methods.${key}.detail`)}</small>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                {payment === "transfer" && (
+                  <label>
+                    {t("payment.reference")}
+                    <input placeholder={t("payment.referencePlaceholder")} />
+                  </label>
+                )}
+                <label className="checkbox">
+                  <input type="checkbox" /> {t("payment.acceptTerms")}
                 </label>
-              )}
-              <label className="checkbox">
-                <input type="checkbox" /> {t("payment.acceptTerms")}
-              </label>
-              <label className="checkbox">
-                <input type="checkbox" /> {t("payment.marketingOptIn")}
-              </label>
-              <p className="payment-note">{t("payment.note")}</p>
-              <div className="button-row">
-                <Button variant="outline" onClick={() => setStep(2)}>
-                  {tCommon("back")}
-                </Button>
-                <Button onClick={onConfirm}>{t("payment.confirm")}</Button>
-              </div>
-            </>
-          )}
+                <label className="checkbox">
+                  <input type="checkbox" /> {t("payment.marketingOptIn")}
+                </label>
+                <p className="payment-note">{t("payment.note")}</p>
+                <div className="button-row">
+                  <Button variant="outline" onClick={() => setStep(2)}>
+                    {tCommon("back")}
+                  </Button>
+                  <Button onClick={onConfirm}>{t("payment.confirm")}</Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
         <aside className="summary order-summary">
           <h2>{t("summary.title")}</h2>

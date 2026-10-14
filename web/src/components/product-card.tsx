@@ -6,8 +6,16 @@ import { productHref, type Product } from "@/lib/catalog";
 import { useFormatPrice, useStatusLabel } from "@/lib/format";
 import { Button, Icon } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
+import { Reveal, stagger } from "@/components/motion";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  index = 0,
+}: {
+  product: Product;
+  /** Position in its grid, for the staggered reveal. */
+  index?: number;
+}) {
   const t = useTranslations("ProductCard");
   const tCommon = useTranslations("Common");
   const tCatalog = useTranslations("Catalog");
@@ -23,7 +31,12 @@ export default function ProductCard({ product }: { product: Product }) {
         ? "badge--muted"
         : "";
   return (
-    <article className="product-card">
+    <Reveal
+      as="article"
+      className="product-card"
+      delay={stagger(index)}
+      whileHover={{ y: -6 }}
+    >
       <button
         className="product-card__image"
         onClick={() => router.push(productHref(product.code))}
@@ -57,6 +70,6 @@ export default function ProductCard({ product }: { product: Product }) {
           {tCommon("addToCart")} <Icon name="arrow" />
         </Button>
       )}
-    </article>
+    </Reveal>
   );
 }

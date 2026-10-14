@@ -8,6 +8,7 @@ import { routing } from "@/i18n/routing";
 import { getProducts, getSiteImages } from "@/lib/api";
 import SiteDataProvider from "@/components/site-data-provider";
 import ShopProvider from "@/components/shop-provider";
+import { MotionProvider } from "@/components/motion";
 import "../globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -48,11 +49,17 @@ export default async function LocaleLayout({
   ]);
 
   return (
-    <html lang={locale} className={`${cormorant.variable} ${dmSans.variable}`}>
+    <html
+      lang={locale}
+      data-scroll-behavior="smooth"
+      className={`${cormorant.variable} ${dmSans.variable}`}
+    >
       <body suppressHydrationWarning>
         <NextIntlClientProvider>
           <SiteDataProvider products={products} images={images}>
-            <ShopProvider>{children}</ShopProvider>
+            <MotionProvider>
+              <ShopProvider>{children}</ShopProvider>
+            </MotionProvider>
           </SiteDataProvider>
         </NextIntlClientProvider>
       </body>

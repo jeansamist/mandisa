@@ -1,9 +1,11 @@
 "use client";
 
 import { createContext, useContext, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Icon } from "@/components/ui";
+import { ease } from "@/components/motion";
 
 type ShopContextValue = {
   cartCount: number;
@@ -51,12 +53,22 @@ export default function ShopProvider({
       }}
     >
       {children}
-      {toast && (
-        <div className="toast">
-          <Icon name="check" /> {t("added")}{" "}
-          <button onClick={() => router.push("/cart")}>{t("view")}</button>
-        </div>
-      )}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            className="toast"
+            // Keep the CSS centering: motion owns `transform` while animating.
+            style={{ x: "-50%" }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.3, ease }}
+          >
+            <Icon name="check" /> {t("added")}{" "}
+            <button onClick={() => router.push("/cart")}>{t("view")}</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ShopContext.Provider>
   );
 }

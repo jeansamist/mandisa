@@ -8,6 +8,8 @@ import { useCatalog } from "@/components/site-data-provider";
 import { Button, Icon, SectionTitle } from "@/components/ui";
 import ProductCard from "@/components/product-card";
 import { useShop } from "@/components/shop-provider";
+import { AnimatePresence } from "motion/react";
+import { Collapse, Reveal, ZoomPanImg } from "@/components/motion";
 
 const trustKeys = ["freeDelivery", "returns", "securePayment"] as const;
 const accordionKeys = ["details", "accessories", "care", "delivery"] as const;
@@ -50,7 +52,7 @@ export default function ProductView({ product }: { product: ProductDetail }) {
       <div className="product-detail">
         <div className="gallery">
           <div className="gallery__main">
-            <img
+            <ZoomPanImg
               src={product.image ?? ""}
               alt={t("imageAlt", { name: product.name })}
             />
@@ -72,7 +74,7 @@ export default function ProductView({ product }: { product: ProductDetail }) {
             <i>▶</i>
           </button>
         </div>
-        <section className="product-info">
+        <Reveal as="section" className="product-info" delay={0.1}>
           <div className="product-info__top">
             <span className="tag">{texture}</span>
             <span>{product.code}</span>
@@ -178,17 +180,21 @@ export default function ProductView({ product }: { product: ProductDetail }) {
                   <b>{t(`accordions.${key}`)}</b>
                   <Icon name={open === key ? "minus" : "plus"} />
                 </button>
-                {open === key && (
-                  <p>
-                    {key === "details"
-                      ? t("detailsText", { texture })
-                      : t("genericText")}
-                  </p>
-                )}
+                <AnimatePresence initial={false}>
+                  {open === key && (
+                    <Collapse>
+                      <p>
+                        {key === "details"
+                          ? t("detailsText", { texture })
+                          : t("genericText")}
+                      </p>
+                    </Collapse>
+                  )}
+                </AnimatePresence>
               </article>
             ))}
           </div>
-        </section>
+        </Reveal>
       </div>
       <section className="section related">
         <SectionTitle
@@ -196,8 +202,8 @@ export default function ProductView({ product }: { product: ProductDetail }) {
           title={t("related.title")}
         />
         <div className="product-grid product-grid--feature">
-          {related.map((p) => (
-            <ProductCard key={p.code} product={p} />
+          {related.map((p, i) => (
+            <ProductCard key={p.code} product={p} index={i} />
           ))}
         </div>
       </section>

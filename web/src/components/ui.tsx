@@ -1,6 +1,8 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useRouter } from "@/i18n/navigation";
+import { Reveal } from "@/components/motion";
 import { SLOGAN } from "@/lib/brand";
 
 export type IconName =
@@ -116,13 +118,14 @@ export function Button({
   disabled?: boolean;
 }) {
   return (
-    <button
+    <motion.button
       className={`button button--${variant}`}
       onClick={onClick}
       disabled={disabled}
+      whileTap={disabled ? undefined : { scale: 0.96 }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 }
 
@@ -150,10 +153,10 @@ export function SectionTitle({
   copy?: string;
 }) {
   return (
-    <div className="section-title">
+    <Reveal className="section-title">
       {eyebrow && <span className="eyebrow">{eyebrow}</span>}
       <h2>{title}</h2>
       {copy && <p>{copy}</p>}
-    </div>
+    </Reveal>
   );
 }
