@@ -216,6 +216,7 @@ docker compose up -d
 cp .env.example .env     # une seule fois
 pnpm install
 pnpm db:migrate          # applique les migrations (drizzle/)
+pnpm build               # applique les migrations puis compile (base requise)
 pnpm db:seed             # données de démo : les 9 perruques + images du site
 pnpm dev
 pnpm test                # tests unitaires (vitest)
