@@ -1,10 +1,12 @@
+import express from "express";
 import { createApp } from "./http/app.js";
 import { pool } from "./db/client.js";
 import { env } from "./env.js";
 import { startJobs } from "./jobs/index.js";
 import { loggableError, logger } from "./logger.js";
 
-const app = createApp();
+// Vercel detects the entry by its `express` import: create the instance here.
+const app = createApp(express());
 
 // Vercel imports this module and serves the default export as a function:
 // no port, no timers there (see routes/cron.ts and http/background.ts).

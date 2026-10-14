@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import express, { type ErrorRequestHandler } from "express";
+import express, { type ErrorRequestHandler, type Express } from "express";
 import { sql } from "drizzle-orm";
 import { pinoHttp } from "pino-http";
 import { db } from "../db/client.js";
@@ -23,8 +23,8 @@ function fullUrl(req: { url?: string; originalUrl?: string }) {
   return req.originalUrl ?? req.url;
 }
 
-export function createApp() {
-  const app = express();
+/** Configures the API on an Express instance (the entry file creates it, as Vercel requires). */
+export function createApp(app: Express = express()) {
   app.disable("x-powered-by");
 
   // One log line per request, with an id shared by every log of that request.
