@@ -2,19 +2,21 @@ import { randomUUID } from "node:crypto";
 import express, { type ErrorRequestHandler } from "express";
 import { sql } from "drizzle-orm";
 import { pinoHttp } from "pino-http";
-import { db } from "./db/client.js";
-import { loggableError, logger } from "./logger.js";
+import { db } from "../db/client.js";
+import { loggableError, logger } from "../logger.js";
 import { ZodError } from "zod";
-import { requireInternalKey } from "./http/internal-key.js";
-import { adminRouter } from "./routes/admin.js";
-import { analyticsRouter } from "./routes/analytics.js";
-import { publicRouter } from "./routes/public.js";
-import { checkoutRouter } from "./routes/checkout.js";
-import { ordersRouter } from "./routes/orders.js";
-import { productsRouter } from "./routes/products.js";
-import { webhooksRouter } from "./routes/webhooks.js";
-import { CheckoutError } from "./services/errors.js";
-import { listSiteImages } from "./services/site-images.js";
+import { sendNotificationsAfterResponse } from "./background.js";
+import { requireInternalKey } from "./internal-key.js";
+import { cronRouter } from "../routes/cron.js";
+import { adminRouter } from "../routes/admin.js";
+import { analyticsRouter } from "../routes/analytics.js";
+import { publicRouter } from "../routes/public.js";
+import { checkoutRouter } from "../routes/checkout.js";
+import { ordersRouter } from "../routes/orders.js";
+import { productsRouter } from "../routes/products.js";
+import { webhooksRouter } from "../routes/webhooks.js";
+import { CheckoutError } from "../services/errors.js";
+import { listSiteImages } from "../services/site-images.js";
 
 // Inside routers `req.url` is relative to the mount point; Express keeps the original.
 function fullUrl(req: { url?: string; originalUrl?: string }) {
@@ -66,17 +68,19 @@ export function createApp() {
   });
 
   // Called by ElgioPay (signed), before the JSON parser: it needs the raw body.
-  app.use("/webhooks", webhooksRouter);
+  app.use("/webhooks", sendNotificationsAfterResponse, webhooksRouter);
+  // Scheduled maintenance (Vercel Cron, own secret).
+  app.use("/cron", cronRouter);
 
   app.use(express.json({ limit: "100kb" }));
   app.use(requireInternalKey);
 
   app.use("/products", productsRouter);
   app.use("/checkout", checkoutRouter);
-  app.use("/orders", ordersRouter);
+  app.use("/orders", sendNotificationsAfterResponse, ordersRouter);
   app.use("/analytics", analyticsRouter);
   app.use("/admin", adminRouter);
-  app.use(publicRouter);
+  app.use(sendNotificationsAfterResponse, publicRouter);
 
   app.get("/site-images", async (req, res) => {
     const images = await listSiteImages();

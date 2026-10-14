@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import type { Logger } from "drizzle-orm/logger";
+import { attachDatabasePool } from "@vercel/functions";
 import pg from "pg";
 import { env } from "../env.js";
 import { logger } from "../logger.js";
@@ -7,7 +8,13 @@ import * as schema from "./schema.js";
 
 const dbLogger = logger.child({ module: "db" });
 
-export const pool = new pg.Pool({ connectionString: env.DATABASE_URL });
+export const pool = new pg.Pool({
+  connectionString: env.DATABASE_URL,
+  max: env.DATABASE_POOL_MAX,
+});
+
+// On Vercel (Fluid compute), releases idle connections before the instance suspends.
+attachDatabasePool(pool);
 
 pool.on("connect", () => dbLogger.debug("postgres client connected"));
 pool.on("error", (err) => dbLogger.error({ err }, "postgres pool error"));

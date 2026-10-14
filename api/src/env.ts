@@ -40,6 +40,11 @@ const schema = z.object({
   /** Google Gemini (Gemini models in /ms). Without a key, Gemini models are unavailable. */
   GEMINI_API_KEY: z.string().optional(),
 
+  /** Secret Vercel sends to /cron/* (Authorization: Bearer …). */
+  CRON_SECRET: z.string().min(16).optional(),
+  /** Max database connections per instance (keep low on serverless; use a pooled URL). */
+  DATABASE_POOL_MAX: z.coerce.number().int().positive().default(10),
+
   /** Admin (/ms) session length. */
   ADMIN_SESSION_HOURS: z.coerce.number().int().positive().default(12),
 

@@ -99,7 +99,8 @@ export async function processOutbox(limit = 20) {
       .where(
         and(
           eq(notifications.status, "pending"),
-          lte(notifications.nextAttemptAt, new Date()),
+          // Database clock on both sides (next_attempt_at defaults to now() in SQL).
+          lte(notifications.nextAttemptAt, sql`now()`),
         ),
       )
       .orderBy(asc(notifications.id))
