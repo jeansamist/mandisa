@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { Icon } from "@/components/ui";
 
 type ShopContextValue = {
@@ -26,6 +27,7 @@ export default function ShopProvider({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const t = useTranslations("Toast");
   const [cartCount, setCartCount] = useState(0);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [toast, setToast] = useState(false);
@@ -51,8 +53,8 @@ export default function ShopProvider({
       {children}
       {toast && (
         <div className="toast">
-          <Icon name="check" /> Ajouté au panier{" "}
-          <button onClick={() => router.push("/cart")}>Voir</button>
+          <Icon name="check" /> {t("added")}{" "}
+          <button onClick={() => router.push("/cart")}>{t("view")}</button>
         </div>
       )}
     </ShopContext.Provider>

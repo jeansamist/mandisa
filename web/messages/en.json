@@ -1,0 +1,593 @@
+{
+  "Metadata": {
+    "title": "Mandisa — Made to look like you.",
+    "description": "Premium ready-to-wear wigs with natural textures, celebrating Black beauty with a simple, seamless shopping experience."
+  },
+  "Common": {
+    "home": "Home",
+    "shop": "Shop",
+    "addToCart": "Add to cart",
+    "back": "Back",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "close": "Close"
+  },
+  "Catalog": {
+    "textures": {
+      "afro": "Afro",
+      "kinkyYaki": "Kinky yaki",
+      "lightYaki": "Light yaki",
+      "curly": "Curly"
+    },
+    "statuses": {
+      "inStock": "In stock",
+      "lowStock": "Only {count} left",
+      "preorder": "Pre-order",
+      "soldOut": "Sold out"
+    }
+  },
+  "Header": {
+    "announcement": "Free delivery in Douala · Pickup available in Bali · Pre-order: made in 4 to 6 weeks",
+    "nav": {
+      "shop": "Shop",
+      "textures": "Textures",
+      "care": "Care guide",
+      "delivery": "Delivery & returns",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "switchLanguage": "Change language",
+    "search": "Search",
+    "account": "Account",
+    "cart": "Cart",
+    "menu": "Menu"
+  },
+  "Footer": {
+    "tagline": "Ready-to-wear wigs with natural textures.",
+    "shopTitle": "Shop",
+    "allWigs": "All wigs",
+    "helpTitle": "Help",
+    "tracking": "Order tracking",
+    "delivery": "Delivery & returns",
+    "faq": "FAQ",
+    "care": "Care guide",
+    "contact": "Contact",
+    "contactTitle": "Contact",
+    "pickup": "Pickup: Bali, Douala",
+    "pickupDetail": "Behind Somatel Hôtel",
+    "paymentMethods": "MTN MoMo · Orange Money · Card · Bank transfer",
+    "terms": "Terms of sale",
+    "privacy": "Privacy",
+    "copyright": "© {year} Mandisa"
+  },
+  "Toast": {
+    "added": "Added to cart",
+    "view": "View"
+  },
+  "Assistant": {
+    "name": "Mandisa Assistant",
+    "availability": "Available 24/7",
+    "inputPlaceholder": "Type your message…",
+    "open": "Need help?",
+    "close": "Close",
+    "preview": {
+      "greeting": "Hello! Which texture are you looking for today?",
+      "userMessage": "A natural texture that's easy to wear."
+    },
+    "panel": {
+      "greeting": "Hello! I can help you choose your wig, check availability, track your order or prepare your cart.",
+      "chips": {
+        "texture": "Which texture suits me?",
+        "availability": "See availability",
+        "tracking": "Track my order",
+        "care": "Care"
+      },
+      "userMessage": "I'm looking for a curly wig, medium length.",
+      "reply": "You might love Syntiche. Would you prefer a defined or a fluffy look?",
+      "viewProduct": "View this wig",
+      "whatsapp": "Talk to a person on WhatsApp"
+    }
+  },
+  "ProductCard": {
+    "imageAlt": "{name}, {texture} wig",
+    "fromPrice": "From {price}",
+    "notifyMe": "Notify me"
+  },
+  "Home": {
+    "hero": {
+      "eyebrow": "Ready-to-wear wigs",
+      "imageAlt": "Warm portrait of a woman with natural afro hair",
+      "intro": "Premium ready-to-wear wigs with natural textures, delivered with their accessories at no extra cost.",
+      "cta": "Discover the collection",
+      "advice": "Get advice",
+      "caption": "IMG_hero · Douala, Cameroon"
+    },
+    "trust": {
+      "readyToWear": "Ready to wear",
+      "accessories": "Accessories included",
+      "freeDelivery": "Free delivery in Douala",
+      "support": "Support 24/7"
+    },
+    "textures": {
+      "eyebrow": "Find your look",
+      "title": "Choose your texture",
+      "copy": "Textures designed to celebrate natural beauty, without compromise.",
+      "imageAlt": "{name} texture",
+      "cta": "See the styles",
+      "descriptions": {
+        "afro": "Generous volume, natural coily texture.",
+        "kinkyYaki": "A smoothed coily texture, soft and natural.",
+        "lightYaki": "A lighter yaki, soft and flowing.",
+        "curly": "Defined curls, full of movement."
+      }
+    },
+    "collection": {
+      "eyebrow": "New in",
+      "title": "The first collection",
+      "copy": "Nine styles, designed to look like you.",
+      "cta": "See the whole collection"
+    },
+    "manifesto": {
+      "eyebrow": "Why Mandisa",
+      "title": "A wig should never disguise you. It should <em>reveal</em> you.",
+      "pillars": {
+        "readyToWear": {
+          "title": "Ready to wear",
+          "text": "No complicated install: put it on, and it looks like you."
+        },
+        "accessories": {
+          "title": "Accessories included",
+          "text": "Every wig comes with its accessories in its packaging."
+        },
+        "origin": {
+          "title": "Documented origin",
+          "text": "A detailed sheet: origin, length, density and weight."
+        },
+        "support": {
+          "title": "Personal support",
+          "text": "An assistant always available, and a real person on WhatsApp."
+        }
+      }
+    },
+    "advisor": {
+      "eyebrow": "Mandisa advisor",
+      "title": "Not sure what to choose?",
+      "copy": "Our assistant helps you choose the texture, length and style that suit you, in French or in English.",
+      "chips": {
+        "texture": "Which texture suits me?",
+        "length": "Which length should I choose?",
+        "order": "Where is my order?",
+        "care": "How do I care for my wig?"
+      },
+      "cta": "Start the conversation"
+    },
+    "how": {
+      "eyebrow": "Simple, from choice to delivery",
+      "title": "How it works",
+      "steps": {
+        "choose": {
+          "title": "Choose",
+          "text": "Browse the collection or ask our assistant for advice."
+        },
+        "pay": {
+          "title": "Pay with ease",
+          "text": "MTN MoMo, Orange Money, card, bank transfer or cash on delivery."
+        },
+        "receive": {
+          "title": "Receive",
+          "text": "Free delivery in Douala, shipping across Cameroon and internationally."
+        }
+      }
+    },
+    "care": {
+      "imageAlt": "Brush and care accessories on light fabric",
+      "eyebrow": "The Mandisa ritual",
+      "title": "Take care of your wig",
+      "copy": "A few simple steps to keep it beautiful for longer.",
+      "cta": "Read the guide"
+    },
+    "newsletter": {
+      "eyebrow": "The Mandisa journal",
+      "title": "Get our new arrivals and offers",
+      "label": "Email or WhatsApp",
+      "placeholder": "you@example.com",
+      "submit": "Subscribe",
+      "consent": "By continuing, I agree to receive news from Mandisa. Unsubscribe at any time."
+    }
+  },
+  "Shop": {
+    "metaTitle": "Shop",
+    "eyebrow": "Collection 01",
+    "title": "The collection",
+    "intro": "{count} ready-to-wear wigs with natural textures.",
+    "models": "styles",
+    "all": "All",
+    "sort": "Sort: Newest",
+    "refine": "Refine",
+    "refineOptions": {
+      "length": "Length",
+      "color": "Color",
+      "capSize": "Cap size",
+      "availability": "Availability"
+    },
+    "empty": {
+      "title": "No results",
+      "copy": "Try changing your filters."
+    },
+    "help": {
+      "eyebrow": "Personal advice",
+      "title": "Need help choosing?",
+      "copy": "Describe the style you're looking for to our assistant.",
+      "cta": "Get advice"
+    }
+  },
+  "Product": {
+    "imageAlt": "{name}, front view",
+    "galleryAlt": "{name}, view {index}",
+    "videoAlt": "Video of the {name} wig",
+    "indicativePrice": "*indicative price",
+    "length": "Length",
+    "color": "Color",
+    "colors": {
+      "naturalBlack": "Natural black",
+      "deepBrown": "Deep brown",
+      "warmBrown": "Warm brown"
+    },
+    "capSize": "Cap size",
+    "sizeGuide": "Size guide",
+    "stockTitle": "In stock — ready to ship",
+    "stockNote": "Free delivery in Douala",
+    "orderOnWhatsapp": "Order on WhatsApp",
+    "trust": {
+      "freeDelivery": "Free delivery in Douala",
+      "returns": "Returns within 24 h, conditions apply",
+      "securePayment": "Secure payment"
+    },
+    "accordions": {
+      "details": "Wig details",
+      "accessories": "Included accessories",
+      "care": "Care tips",
+      "delivery": "Delivery and returns"
+    },
+    "detailsText": "Texture: {texture} · Density: 180% · Lace: 13×4 · Origin and weight: to be confirmed.",
+    "genericText": "Detailed information and Mandisa recommendations. Content to be confirmed with the supplier.",
+    "related": {
+      "eyebrow": "In the same spirit",
+      "title": "You may also like"
+    }
+  },
+  "Cart": {
+    "metaTitle": "Cart",
+    "emptyTitle": "Your cart is empty",
+    "emptyCopy": "Your next look is waiting for you in the collection.",
+    "discover": "Discover the collection",
+    "title": "Your cart <sup>({count})</sup>",
+    "lineVariant": "Afro · 14\" · Natural black · Cap M",
+    "remove": "Remove",
+    "promoPlaceholder": "Promo code",
+    "apply": "Apply",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "delivery": "Delivery",
+    "freeInDouala": "Free in Douala",
+    "total": "Total",
+    "checkout": "Proceed to checkout",
+    "continueShopping": "Continue shopping",
+    "paymentNote": "Full payment is required before confirmation, except for cash on delivery."
+  },
+  "Checkout": {
+    "metaTitle": "Checkout",
+    "backToCart": "Back to cart",
+    "steps": {
+      "info": "Details",
+      "delivery": "Delivery",
+      "payment": "Payment"
+    },
+    "stepOf": "Step {step} of {total}",
+    "info": {
+      "title": "Your details",
+      "guest": "Continue as guest",
+      "createAccount": "Create an account",
+      "firstName": "First name",
+      "firstNamePlaceholder": "Your first name",
+      "lastName": "Last name",
+      "lastNamePlaceholder": "Your last name",
+      "phone": "Phone (WhatsApp)",
+      "phonePlaceholder": "+237 6•• ••• •••",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "next": "Continue to delivery"
+    },
+    "delivery": {
+      "title": "Delivery method",
+      "options": {
+        "douala": {
+          "title": "Douala, home delivery",
+          "detail": "Free · target 1 h maximum [to be confirmed]"
+        },
+        "bali": {
+          "title": "Pickup in Bali",
+          "detail": "Behind Somatel Hôtel, past Hôtel Premium"
+        },
+        "otherCity": {
+          "title": "Other city in Cameroon",
+          "detail": "Rate shared before payment"
+        },
+        "international": {
+          "title": "International",
+          "detail": "Fees confirmed before validation"
+        }
+      },
+      "district": "Neighborhood",
+      "districtPlaceholder": "E.g. Bonapriso",
+      "landmark": "Delivery landmark",
+      "landmarkPlaceholder": "Near…",
+      "address": "Address",
+      "addressPlaceholder": "Street, building, floor",
+      "next": "Continue to payment"
+    },
+    "payment": {
+      "title": "Payment",
+      "methods": {
+        "momo": {
+          "title": "MTN MoMo",
+          "detail": "Approve from your phone"
+        },
+        "orange": {
+          "title": "Orange Money",
+          "detail": "Approve from your phone"
+        },
+        "card": {
+          "title": "Bank card",
+          "detail": "Visa, Mastercard"
+        },
+        "transfer": {
+          "title": "Bank transfer",
+          "detail": "Proof of payment required"
+        },
+        "delivery": {
+          "title": "Cash on delivery",
+          "detail": "Available in Douala"
+        }
+      },
+      "reference": "Transaction reference",
+      "referencePlaceholder": "Reference",
+      "acceptTerms": "I accept the terms of sale",
+      "marketingOptIn": "I would like to receive offers by WhatsApp / email",
+      "note": "Your order is confirmed once payment is received.",
+      "confirm": "Confirm and pay"
+    },
+    "summary": {
+      "title": "Your order",
+      "variant": "14\" · Black · M",
+      "subtotal": "Subtotal",
+      "delivery": "Delivery",
+      "free": "Free",
+      "total": "Total"
+    }
+  },
+  "Orders": {
+    "statuses": {
+      "paid": "Paid",
+      "preparing": "Being prepared",
+      "ready": "Ready",
+      "shipped": "Shipped",
+      "delivered": "Delivered"
+    }
+  },
+  "Confirmation": {
+    "metaTitle": "Order confirmed",
+    "eyebrow": "Order confirmed",
+    "title": "Thank you, {name}!",
+    "body": "Your order no. <b>{orderNumber}</b> has been placed. We are sending you a confirmation by WhatsApp and email.",
+    "variant": "Afro · 14\" · Cap M",
+    "delivery": "Delivery",
+    "deliveryValue": "Douala, home delivery",
+    "payment": "Payment",
+    "total": "Total",
+    "track": "Track my order",
+    "backToShop": "Back to the shop"
+  },
+  "Tracking": {
+    "metaTitle": "Track my order",
+    "eyebrow": "Your order, step by step",
+    "title": "Track my order",
+    "intro": "Enter your order number and the phone number used at purchase.",
+    "submit": "Track",
+    "inProgress": "In progress",
+    "orderTitle": "Order {orderNumber}",
+    "destination": "Delivery to Bonapriso, Douala",
+    "upcoming": "Upcoming",
+    "events": {
+      "paid": {
+        "date": "June 18 · 10:32",
+        "text": "Your MTN MoMo payment has been confirmed."
+      },
+      "preparing": {
+        "date": "June 18 · 11:05",
+        "text": "Our team is preparing your wig and its accessories."
+      },
+      "ready": {
+        "text": "We'll let you know as soon as your order is ready."
+      }
+    },
+    "contact": "Contact the team on WhatsApp"
+  },
+  "Account": {
+    "metaTitle": "My account",
+    "eyebrow": "Your space",
+    "greeting": "Hello {name}, lovely to see you again.",
+    "tabs": {
+      "orders": "My orders",
+      "favorites": "My favorites",
+      "preferences": "My preferences",
+      "addresses": "My addresses"
+    },
+    "orderSummary": "{count, plural, one {# item} other {# items}} · {total}",
+    "productLine": "Nadège · Afro · 14\"",
+    "viewDetails": "View details"
+  },
+  "Info": {
+    "care": {
+      "metaTitle": "Care guide",
+      "eyebrow": "The Mandisa ritual",
+      "title": "Take care of your wig",
+      "intro": "A few simple steps to keep your wig beautiful for longer.",
+      "items": {
+        "beforeWearing": {
+          "title": "Before wearing",
+          "text": "Gently prepare the fibers with your fingers and adjust the cap without pulling on the lace."
+        },
+        "washing": {
+          "title": "Washing",
+          "text": "Use lukewarm water and gentle products. Don't rub: let it soak, then rinse delicately."
+        },
+        "drying": {
+          "title": "Drying",
+          "text": "Pat dry with a clean towel and let it air-dry on a suitable stand."
+        },
+        "styling": {
+          "title": "Styling",
+          "text": "Detangle from the ends to the roots. Keep heat moderate and suited to the fiber."
+        },
+        "storage": {
+          "title": "Storage",
+          "text": "Store your wig clean, dry and out of the sun, ideally on a stand."
+        }
+      }
+    },
+    "delivery": {
+      "metaTitle": "Delivery and returns",
+      "eyebrow": "Service & peace of mind",
+      "title": "Delivery and returns",
+      "intro": "We're with you before, during and after your order.",
+      "items": {
+        "douala": {
+          "title": "Douala, home delivery",
+          "text": "Free — target: within 1 h maximum [to be confirmed]."
+        },
+        "bali": {
+          "title": "Pickup in Bali",
+          "text": "Behind Somatel Hôtel, past Hôtel Premium."
+        },
+        "otherCities": {
+          "title": "Other cities & international",
+          "text": "Rate and lead time confirmed with you before payment."
+        },
+        "preorder": {
+          "title": "Pre-order",
+          "text": "4 to 6 weeks of production after payment, then shipping."
+        },
+        "returns": {
+          "title": "Returns & exchanges",
+          "text": "Request within 24 h. The wig must be new, unworn and unaltered, with intact lace and all its accessories."
+        },
+        "damaged": {
+          "title": "Damaged product",
+          "text": "Send us your claim with photos: our team will offer you the best solution."
+        }
+      }
+    },
+    "about": {
+      "metaTitle": "About",
+      "eyebrow": "Our purpose",
+      "title": "Made to look like you.",
+      "intro": "Mandisa is a premium brand of ready-to-wear wigs with natural textures. Our promise: a wig that looks like you.",
+      "items": {
+        "natural": {
+          "title": "Natural",
+          "text": "Textures that celebrate Black beauty in all its richness."
+        },
+        "care": {
+          "title": "Care",
+          "text": "Attention paid to the product, its origin and every detail."
+        },
+        "trust": {
+          "title": "Confidence",
+          "text": "Recognizing yourself, feeling like yourself, and moving forward with confidence."
+        }
+      }
+    },
+    "cta": {
+      "careTitle": "A question about care?",
+      "defaultTitle": "Need personal advice?",
+      "copy": "Our assistant is available 24/7.",
+      "button": "Ask the assistant"
+    }
+  },
+  "Faq": {
+    "metaTitle": "FAQ",
+    "eyebrow": "Frequently asked questions",
+    "title": "How can we help you?",
+    "tabs": {
+      "ordering": "Ordering",
+      "payment": "Payment",
+      "delivery": "Delivery",
+      "returns": "Returns",
+      "care": "Care"
+    },
+    "questions": {
+      "howToOrder": "How do I place an order?",
+      "paymentMethods": "Which payment methods do you accept?",
+      "payOnDelivery": "Can I pay on delivery?",
+      "preorder": "What does \"pre-order\" mean?",
+      "deliveryTime": "How long does delivery take?",
+      "shipping": "Do you deliver outside Douala and internationally?",
+      "returns": "Can I return or exchange my wig?",
+      "care": "How do I care for my wig?",
+      "human": "Can I talk to a person?"
+    },
+    "answer": "Our team supports you at every step. Details may vary depending on availability, your city and the payment method you choose.",
+    "help": {
+      "eyebrow": "Still have a question?",
+      "title": "Can't find your answer?",
+      "cta": "Message us on WhatsApp"
+    }
+  },
+  "Contact": {
+    "metaTitle": "Contact",
+    "eyebrow": "We're here",
+    "title": "Let's talk",
+    "intro": "An assistant replies 24/7. A person takes over on WhatsApp.",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "instagram": "Instagram",
+      "tiktok": "TikTok"
+    },
+    "emailPending": "[address to be created]",
+    "cta": "Contact us",
+    "pickup": {
+      "eyebrow": "Pickup in Douala",
+      "address": "Bali, behind Somatel Hôtel,<br></br>past Hôtel Premium."
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "phone": "Phone",
+      "message": "Message",
+      "messagePlaceholder": "How can we help you?",
+      "submit": "Send message"
+    }
+  },
+  "Legal": {
+    "metaTitle": "Terms of sale",
+    "eyebrow": "Legal information",
+    "title": "Terms of sale",
+    "updated": "Last updated: June 2026",
+    "sections": {
+      "purpose": "Purpose",
+      "orders": "Orders and payment",
+      "delivery": "Delivery",
+      "returns": "Returns and refunds"
+    },
+    "placeholder": "[Text to be written] These terms describe the conditions applicable to orders placed on the Mandisa website."
+  },
+  "NotFound": {
+    "metaTitle": "Page not found",
+    "title": "Page not found",
+    "copy": "The page you're looking for doesn't exist or has been moved.",
+    "cta": "Back to home"
+  }
+}

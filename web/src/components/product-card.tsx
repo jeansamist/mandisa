@@ -1,13 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { productHref, type Product } from "@/lib/catalog";
+import { useFormatPrice, useStatusLabel } from "@/lib/format";
 import { Button, Icon } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const t = useTranslations("ProductCard");
+  const tCommon = useTranslations("Common");
+  const tCatalog = useTranslations("Catalog");
+  const formatPrice = useFormatPrice();
+  const statusLabel = useStatusLabel();
   const router = useRouter();
   const { addToCart } = useShop();
+  const texture = tCatalog(`textures.${product.texture}`);
+  const badgeModifier =
+    product.status === "preorder"
+      ? "badge--clay"
+      : product.status === "soldOut"
+        ? "badge--muted"
+        : "";
   return (
     <article className="product-card">
       <button
@@ -15,35 +29,32 @@ export default function ProductCard({ product }: { product: Product }) {
         onClick={() => router.push(productHref(product.code))}
       >
         <img
-          src={product.image}
-          alt={`${product.name}, perruque ${product.texture}`}
+          src={product.image ?? ""}
+          alt={t("imageAlt", { name: product.name, texture })}
         />
-        <span
-          className={`badge ${product.status === "Précommande" ? "badge--clay" : product.status === "Rupture" ? "badge--muted" : ""}`}
-        >
-          {product.status}
-        </span>
+        <span className={`badge ${badgeModifier}`}>{statusLabel(product)}</span>
         <i className="heart">
           <Icon name="heart" />
         </i>
       </button>
       <div className="product-card__meta">
         <div>
-          <span>{product.texture}</span>
+          <span>{texture}</span>
           <h3>{product.name}</h3>
           <small>{product.code}</small>
         </div>
         <strong>
-          À partir de {product.price} FCFA<sup>*</sup>
+          {t("fromPrice", { price: formatPrice(product.priceXaf) })}
+          <sup>*</sup>
         </strong>
       </div>
-      {product.status === "Rupture" ? (
+      {product.status === "soldOut" ? (
         <Button variant="outline" disabled>
-          Me prévenir
+          {t("notifyMe")}
         </Button>
       ) : (
         <Button variant="text" onClick={addToCart}>
-          Ajouter au panier <Icon name="arrow" />
+          {tCommon("addToCart")} <Icon name="arrow" />
         </Button>
       )}
     </article>

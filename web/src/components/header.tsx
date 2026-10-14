@@ -1,11 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { Icon, Logo } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
 
+function LanguageSwitch() {
+  const t = useTranslations("Header");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+  const next =
+    routing.locales.find((l) => l !== locale) ?? routing.defaultLocale;
+  return (
+    <button
+      className="language"
+      aria-label={t("switchLanguage")}
+      onClick={() => router.replace(pathname, { locale: next })}
+    >
+      {routing.locales.map((l) =>
+        l === locale ? (
+          <b key={l}>{l.toUpperCase()}</b>
+        ) : (
+          <span key={l}>{l.toUpperCase()}</span>
+        ),
+      )}
+    </button>
+  );
+}
+
 export default function Header() {
+  const t = useTranslations("Header");
   const router = useRouter();
   const { cartCount } = useShop();
   const [menu, setMenu] = useState(false);
@@ -15,40 +42,34 @@ export default function Header() {
   };
   return (
     <>
-      <div className="announcement">
-        Livraison gratuite à Douala · Retrait possible à Bali · Précommande :
-        fabrication de 4 à 6 semaines
-      </div>
+      <div className="announcement">{t("announcement")}</div>
       <header className="header">
         <Logo />
         <nav className={menu ? "nav nav--open" : "nav"}>
-          <button onClick={() => navTo("/shop")}>Boutique</button>
-          <button onClick={() => navTo("/shop")}>Textures</button>
-          <button onClick={() => navTo("/care")}>Guide d&apos;entretien</button>
+          <button onClick={() => navTo("/shop")}>{t("nav.shop")}</button>
+          <button onClick={() => navTo("/shop")}>{t("nav.textures")}</button>
+          <button onClick={() => navTo("/care")}>{t("nav.care")}</button>
           <button onClick={() => navTo("/delivery")}>
-            Livraison & retours
+            {t("nav.delivery")}
           </button>
-          <button onClick={() => navTo("/about")}>À propos</button>
-          <button onClick={() => navTo("/contact")}>Contact</button>
+          <button onClick={() => navTo("/about")}>{t("nav.about")}</button>
+          <button onClick={() => navTo("/contact")}>{t("nav.contact")}</button>
         </nav>
         <div className="header__actions">
-          <button className="language">
-            <b>FR</b>
-            <span>EN</span>
-          </button>
-          <button className="desktop-icon" aria-label="Rechercher">
+          <LanguageSwitch />
+          <button className="desktop-icon" aria-label={t("search")}>
             <Icon name="search" />
           </button>
           <button
             className="desktop-icon"
-            aria-label="Compte"
+            aria-label={t("account")}
             onClick={() => router.push("/account")}
           >
             <Icon name="user" />
           </button>
           <button
             className="cart-icon"
-            aria-label="Panier"
+            aria-label={t("cart")}
             onClick={() => router.push("/cart")}
           >
             <Icon name="bag" />
@@ -56,7 +77,7 @@ export default function Header() {
           </button>
           <button
             className="menu-button"
-            aria-label="Menu"
+            aria-label={t("menu")}
             onClick={() => setMenu(!menu)}
           >
             <Icon name={menu ? "close" : "menu"} />

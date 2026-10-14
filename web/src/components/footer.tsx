@@ -1,66 +1,63 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { textures } from "@/lib/catalog";
 import { Logo } from "@/components/ui";
 
 export default function Footer() {
+  const t = useTranslations("Footer");
+  const tCatalog = useTranslations("Catalog");
   const router = useRouter();
   return (
     <footer>
       <div className="footer-grid container">
         <div>
           <Logo light />
-          <p>Perruques prêtes à porter aux textures naturelles.</p>
+          <p>{t("tagline")}</p>
         </div>
         <div>
-          <b>Boutique</b>
-          {[
-            "Toutes les perruques",
-            "Afro",
-            "Kinky yaki",
-            "Light yaki",
-            "Bouclées",
-          ].map((x) => (
+          <b>{t("shopTitle")}</b>
+          <button onClick={() => router.push("/shop")}>{t("allWigs")}</button>
+          {textures.map((x) => (
             <button onClick={() => router.push("/shop")} key={x}>
-              {x}
+              {tCatalog(`textures.${x}`)}
             </button>
           ))}
         </div>
         <div>
-          <b>Aide</b>
+          <b>{t("helpTitle")}</b>
           <button onClick={() => router.push("/tracking")}>
-            Suivi de commande
+            {t("tracking")}
           </button>
           <button onClick={() => router.push("/delivery")}>
-            Livraison & retours
+            {t("delivery")}
           </button>
-          <button onClick={() => router.push("/faq")}>FAQ</button>
-          <button onClick={() => router.push("/care")}>
-            Guide d&apos;entretien
+          <button onClick={() => router.push("/faq")}>{t("faq")}</button>
+          <button onClick={() => router.push("/care")}>{t("care")}</button>
+          <button onClick={() => router.push("/contact")}>
+            {t("contact")}
           </button>
-          <button onClick={() => router.push("/contact")}>Contact</button>
         </div>
         <div>
-          <b>Contact</b>
+          <b>{t("contactTitle")}</b>
           <p>
             WhatsApp
             <br />
             +237 650 911 804
           </p>
           <p>
-            Retrait : Bali, Douala
+            {t("pickup")}
             <br />
-            Derrière Somatel Hôtel
+            {t("pickupDetail")}
           </p>
         </div>
       </div>
       <div className="footer-bottom container">
-        <span>MTN MoMo · Orange Money · Carte · Virement</span>
-        <button onClick={() => router.push("/legal")}>
-          Conditions de vente
-        </button>
-        <button onClick={() => router.push("/legal")}>Confidentialité</button>
-        <span>© 2026 Mandisa</span>
+        <span>{t("paymentMethods")}</span>
+        <button onClick={() => router.push("/legal")}>{t("terms")}</button>
+        <button onClick={() => router.push("/legal")}>{t("privacy")}</button>
+        <span>{t("copyright", { year: 2026 })}</span>
       </div>
     </footer>
   );

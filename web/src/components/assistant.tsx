@@ -1,11 +1,43 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { photos, productHref } from "@/lib/catalog";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { productHref, type Product } from "@/lib/catalog";
+import { useFormatPrice, useStatusLabel } from "@/lib/format";
+import { useCatalog } from "@/components/site-data-provider";
 import { Icon } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
 
+function MiniProduct({
+  product,
+  children,
+}: {
+  product: Product;
+  children?: React.ReactNode;
+}) {
+  const tCatalog = useTranslations("Catalog");
+  const formatPrice = useFormatPrice();
+  const statusLabel = useStatusLabel();
+  return (
+    <div className="mini-product">
+      <img src={product.image ?? ""} alt={product.name} />
+      <div>
+        <span>
+          {tCatalog(`textures.${product.texture}`)} · {statusLabel(product)}
+        </span>
+        <b>{product.name}</b>
+        <small>{formatPrice(product.priceXaf)}</small>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function ChatPreview() {
+  const t = useTranslations("Assistant");
+  const locale = useLocale();
+  // Demo conversation from the design; the real assistant comes in phase 2.
+  const featured = useCatalog().find("MDS-W01");
   return (
     <div className="chat-preview">
       <div className="chat-head">
@@ -13,35 +45,26 @@ export function ChatPreview() {
           <Icon name="sparkle" />
         </span>
         <div>
-          <b>Assistante Mandisa</b>
-          <small>Disponible 24 h/24</small>
+          <b>{t("name")}</b>
+          <small>{t("availability")}</small>
         </div>
-        <i>FR</i>
+        <i>{locale.toUpperCase()}</i>
       </div>
-      <div className="bubble">
-        Bonjour ! Quelle texture recherchez-vous aujourd&apos;hui ?
-      </div>
-      <div className="bubble bubble--user">
-        Une texture naturelle et facile à porter.
-      </div>
-      <div className="mini-product">
-        <img src={photos.afro} alt="Nadège" />
-        <div>
-          <span>Afro · En stock</span>
-          <b>Nadège</b>
-          <small>98 000 FCFA</small>
-        </div>
-      </div>
+      <div className="bubble">{t("preview.greeting")}</div>
+      <div className="bubble bubble--user">{t("preview.userMessage")}</div>
+      {featured && <MiniProduct product={featured} />}
       <div className="fake-input">
-        Écrivez votre message… <Icon name="send" />
+        {t("inputPlaceholder")} <Icon name="send" />
       </div>
     </div>
   );
 }
 
 export default function Assistant() {
+  const t = useTranslations("Assistant");
   const router = useRouter();
   const { assistantOpen: open, setAssistantOpen: setOpen } = useShop();
+  const suggested = useCatalog().find("MDS-W04");
   const navTo = (href: string) => {
     setOpen(false);
     router.push(href);
@@ -54,7 +77,7 @@ export default function Assistant() {
         onClick={() => setOpen(!open)}
       >
         <Icon name={open ? "close" : "message"} />
-        <span>{open ? "Fermer" : "Besoin d'aide ?"}</span>
+        <span>{open ? t("close") : t("open")}</span>
       </button>
       {open && (
         <aside className="assistant-panel">
@@ -63,52 +86,40 @@ export default function Assistant() {
               <Icon name="sparkle" />
             </span>
             <div>
-              <b>Assistante Mandisa</b>
+              <b>{t("name")}</b>
               <small>
-                <i /> Disponible 24 h/24
+                <i /> {t("availability")}
               </small>
             </div>
-            <button onClick={() => setOpen(false)}>
+            <button aria-label={t("close")} onClick={() => setOpen(false)}>
               <Icon name="close" />
             </button>
           </div>
           <div className="chat-body">
-            <div className="bubble">
-              Bonjour ! Je peux vous aider à choisir votre perruque, vérifier la
-              disponibilité, suivre votre commande ou préparer votre panier.
-            </div>
+            <div className="bubble">{t("panel.greeting")}</div>
             <div className="chat-chips">
-              <button>Quelle texture pour moi ?</button>
-              <button>Voir les disponibilités</button>
+              <button>{t("panel.chips.texture")}</button>
+              <button>{t("panel.chips.availability")}</button>
               <button onClick={() => navTo("/tracking")}>
-                Suivre ma commande
+                {t("panel.chips.tracking")}
               </button>
-              <button>Entretien</button>
+              <button>{t("panel.chips.care")}</button>
             </div>
-            <div className="bubble bubble--user">
-              Je cherche une perruque bouclée, longueur moyenne.
-            </div>
-            <div className="bubble">
-              Syntiche pourrait beaucoup vous plaire. Souhaitez-vous un rendu
-              plutôt défini ou aérien ?
-            </div>
-            <div className="mini-product">
-              <img src={photos.curly} alt="Syntiche" />
-              <div>
-                <span>Bouclée · En stock</span>
-                <b>Syntiche</b>
-                <small>128 000 FCFA</small>
-                <button onClick={() => navTo(productHref("MDS-W04"))}>
-                  Voir le modèle
+            <div className="bubble bubble--user">{t("panel.userMessage")}</div>
+            <div className="bubble">{t("panel.reply")}</div>
+            {suggested && (
+              <MiniProduct product={suggested}>
+                <button onClick={() => navTo(productHref(suggested.code))}>
+                  {t("panel.viewProduct")}
                 </button>
-              </div>
-            </div>
+              </MiniProduct>
+            )}
           </div>
           <div className="chat-footer">
             <div className="fake-input">
-              Écrivez votre message… <Icon name="send" />
+              {t("inputPlaceholder")} <Icon name="send" />
             </div>
-            <button>Parler à une personne sur WhatsApp</button>
+            <button>{t("panel.whatsapp")}</button>
           </div>
         </aside>
       )}

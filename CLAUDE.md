@@ -29,8 +29,8 @@
 
 | Couche       | Choix par défaut                                                                                                            |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| Frontend     | Next.js (App Router) + TypeScript + Tailwind, i18n FR/EN                                                                    |
-| Backend / DB | Supabase (PostgreSQL, Auth, Storage, Edge Functions)                                                                        |
+| Frontend     | Next.js 16 (App Router) + TypeScript + Tailwind v4, i18n FR/EN avec next-intl (`web/`) |
+| Backend / DB | API Express 5 + TypeScript (`api/`), PostgreSQL via Drizzle ORM. Base de dev via Docker Compose (`compose.yaml`). Supabase écarté pour l'instant |
 | IA           | API Claude (tool use). Modèle rapide pour le courant, modèle plus puissant pour les conseils complexes                      |
 | WhatsApp     | WhatsApp Business Platform (Cloud API Meta), directement ou via BSP                                                         |
 | Paiement     | Un agrégateur unique couvrant MTN MoMo, Orange Money et carte (Notch Pay, Flutterwave, Fapshi ou Campay : choix en attente) |
@@ -204,15 +204,35 @@ Journaliser chaque appel d'outil dans `ai_actions`. Limiter le débit par client
 
 ---
 
-## 11. Commandes (à compléter une fois le projet initialisé)
+## 11. Commandes
+
+Gestionnaire de paquets : **pnpm**. Deux projets indépendants : `api/` et `web/`.
 
 ```bash
-npm install          # dépendances
-npm run dev          # serveur de développement
-npm run lint         # lint
-npm run test         # tests
-npm run build        # build production
+# Base de données de dev (Postgres 17, port hôte 5433)
+docker compose up -d
+
+# API (http://localhost:4000) — dans api/
+cp .env.example .env     # une seule fois
+pnpm install
+pnpm db:migrate          # applique les migrations (drizzle/)
+pnpm db:seed             # données de démo : les 9 perruques + images du site
+pnpm dev
+pnpm test                # tests unitaires (vitest)
+pnpm db:generate         # après modification de src/db/schema.ts
+
+# Web (http://localhost:3000) — dans web/
+cp .env.example .env.local   # API_URL
+pnpm install
+pnpm dev
+pnpm build               # l'API doit tourner : les pages sont pré-rendues avec ses données
+pnpm lint
+pnpm format
 ```
+
+- Textes UI : `web/messages/fr.json` et `en.json`.
+- Le web lit l'API uniquement côté serveur (`web/src/lib/api.ts`, cache `minutes`) ; le navigateur ne l'appelle jamais.
+- Toutes les images (produits et site) sont des URL stockées en base (`product_media`, `site_images`).
 
 ---
 

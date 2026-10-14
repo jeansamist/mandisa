@@ -1,62 +1,78 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { photos } from "@/lib/catalog";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { useCatalog } from "@/components/site-data-provider";
+import { useFormatPrice } from "@/lib/format";
 import { Button, Icon } from "@/components/ui";
 
+// Mock order data until orders come from the backend.
+const ORDER_NUMBER = "MDS-2026-0001";
+const CUSTOMER_NAME = "Mireille";
+const orderStatuses = [
+  "paid",
+  "preparing",
+  "ready",
+  "shipped",
+  "delivered",
+] as const;
+
 export function ConfirmationView() {
+  const t = useTranslations("Confirmation");
+  const tOrders = useTranslations("Orders");
+  const formatPrice = useFormatPrice();
   const router = useRouter();
+  const item = useCatalog().find("MDS-W01");
+  if (!item) return null;
   return (
     <main className="page container confirmation">
       <div className="success-mark">
         <Icon name="check" />
       </div>
-      <span className="eyebrow">Commande confirmée</span>
-      <h1>Merci, Mireille !</h1>
+      <span className="eyebrow">{t("eyebrow")}</span>
+      <h1>{t("title", { name: CUSTOMER_NAME })}</h1>
       <p>
-        Votre commande n° <b>MDS-2026-0001</b> est enregistrée. Nous vous
-        envoyons une confirmation par WhatsApp et par email.
+        {t.rich("body", {
+          orderNumber: ORDER_NUMBER,
+          b: (chunks) => <b>{chunks}</b>,
+        })}
       </p>
       <section className="confirmation-card">
         <div className="order-product">
-          <img src={photos.afro} alt="Nadège" />
+          <img src={item.image ?? ""} alt={item.name} />
           <div>
-            <b>Nadège</b>
-            <small>Afro · 14" · Bonnet M</small>
+            <b>{item.name}</b>
+            <small>{t("variant")}</small>
           </div>
-          <strong>98 000 FCFA</strong>
+          <strong>{formatPrice(item.priceXaf)}</strong>
         </div>
         <div className="timeline">
-          {["Payée", "En préparation", "Prête", "Expédiée", "Livrée"].map(
-            (x, i) => (
-              <div className={i === 0 ? "active" : ""} key={x}>
-                <i>{i === 0 ? "✓" : i + 1}</i>
-                <span>{x}</span>
-              </div>
-            ),
-          )}
+          {orderStatuses.map((key, i) => (
+            <div className={i === 0 ? "active" : ""} key={key}>
+              <i>{i === 0 ? "✓" : i + 1}</i>
+              <span>{tOrders(`statuses.${key}`)}</span>
+            </div>
+          ))}
         </div>
         <div className="receipt">
           <p>
-            <span>Livraison</span>
-            <b>Douala, à domicile</b>
+            <span>{t("delivery")}</span>
+            <b>{t("deliveryValue")}</b>
           </p>
           <p>
-            <span>Paiement</span>
+            <span>{t("payment")}</span>
             <b>MTN MoMo</b>
           </p>
           <p>
-            <span>Total</span>
-            <b>98 000 FCFA</b>
+            <span>{t("total")}</span>
+            <b>{formatPrice(item.priceXaf)}</b>
           </p>
         </div>
       </section>
       <div className="button-row">
-        <Button onClick={() => router.push("/tracking")}>
-          Suivre ma commande
-        </Button>
+        <Button onClick={() => router.push("/tracking")}>{t("track")}</Button>
         <Button variant="outline" onClick={() => router.push("/shop")}>
-          Retour à la boutique
+          {t("backToShop")}
         </Button>
       </div>
     </main>
@@ -64,91 +80,98 @@ export function ConfirmationView() {
 }
 
 export function TrackingView() {
+  const t = useTranslations("Tracking");
+  const tOrders = useTranslations("Orders");
+  const events: Record<
+    (typeof orderStatuses)[number],
+    { date?: string; text?: string }
+  > = {
+    paid: { date: t("events.paid.date"), text: t("events.paid.text") },
+    preparing: {
+      date: t("events.preparing.date"),
+      text: t("events.preparing.text"),
+    },
+    ready: { text: t("events.ready.text") },
+    shipped: {},
+    delivered: {},
+  };
   return (
     <main className="page tracking-page">
       <section className="tracking-hero">
         <div className="container">
-          <span className="eyebrow eyebrow--light">
-            Votre commande, pas à pas
-          </span>
-          <h1>Suivre ma commande</h1>
-          <p>
-            Entrez votre numéro de commande et le téléphone utilisé lors de
-            l'achat.
-          </p>
+          <span className="eyebrow eyebrow--light">{t("eyebrow")}</span>
+          <h1>{t("title")}</h1>
+          <p>{t("intro")}</p>
           <div className="tracking-form">
-            <input value="MDS-2026-0001" readOnly />
+            <input value={ORDER_NUMBER} readOnly />
             <input value="+237 650 ••• •••" readOnly />
-            <Button variant="light">Suivre</Button>
+            <Button variant="light">{t("submit")}</Button>
           </div>
         </div>
       </section>
       <section className="container tracking-result">
         <div>
-          <span className="tag">En cours</span>
-          <h2>Commande MDS-2026-0001</h2>
-          <p>Livraison à Bonapriso, Douala</p>
+          <span className="tag">{t("inProgress")}</span>
+          <h2>{t("orderTitle", { orderNumber: ORDER_NUMBER })}</h2>
+          <p>{t("destination")}</p>
         </div>
         <div className="vertical-timeline">
-          {[
-            [
-              "18 juin · 10:32",
-              "Payée",
-              "Votre paiement MTN MoMo a été confirmé.",
-            ],
-            [
-              "18 juin · 11:05",
-              "En préparation",
-              "Notre équipe prépare votre perruque et ses accessoires.",
-            ],
-            [
-              "À venir",
-              "Prête",
-              "Vous serez avertie dès que votre commande sera prête.",
-            ],
-            ["À venir", "Expédiée", ""],
-            ["À venir", "Livrée", ""],
-          ].map((x, i) => (
-            <article className={i < 2 ? "active" : ""} key={x[1]}>
+          {orderStatuses.map((key, i) => (
+            <article className={i < 2 ? "active" : ""} key={key}>
               <i>{i < 2 ? "✓" : i + 1}</i>
               <div>
-                <span>{x[0]}</span>
-                <h3>{x[1]}</h3>
-                <p>{x[2]}</p>
+                <span>{events[key].date ?? t("upcoming")}</span>
+                <h3>{tOrders(`statuses.${key}`)}</h3>
+                <p>{events[key].text}</p>
               </div>
             </article>
           ))}
         </div>
-        <Button variant="outline">Contacter l'équipe sur WhatsApp</Button>
+        <Button variant="outline">{t("contact")}</Button>
       </section>
     </main>
   );
 }
 
+const accountTabs = [
+  "orders",
+  "favorites",
+  "preferences",
+  "addresses",
+] as const;
+
 export function AccountView() {
+  const t = useTranslations("Account");
+  const tOrders = useTranslations("Orders");
+  const formatPrice = useFormatPrice();
   const router = useRouter();
+  const item = useCatalog().find("MDS-W01");
+  if (!item) return null;
   return (
     <main className="page container">
-      <span className="eyebrow">Votre espace</span>
-      <h1>Bonjour Mireille, ravie de vous retrouver.</h1>
+      <span className="eyebrow">{t("eyebrow")}</span>
+      <h1>{t("greeting", { name: CUSTOMER_NAME })}</h1>
       <div className="account-tabs">
-        <button className="active">Mes commandes</button>
-        <button>Mes favoris</button>
-        <button>Mes préférences</button>
-        <button>Mes adresses</button>
+        {accountTabs.map((key, i) => (
+          <button className={i === 0 ? "active" : ""} key={key}>
+            {t(`tabs.${key}`)}
+          </button>
+        ))}
       </div>
       <section className="account-order">
         <div>
-          <span className="tag">En préparation</span>
-          <h2>MDS-2026-0001</h2>
-          <p>1 article · 98 000 FCFA</p>
+          <span className="tag">{tOrders("statuses.preparing")}</span>
+          <h2>{ORDER_NUMBER}</h2>
+          <p>
+            {t("orderSummary", { count: 1, total: formatPrice(item.priceXaf) })}
+          </p>
         </div>
         <div className="order-product">
-          <img src={photos.afro} alt="Nadège" />
-          <b>Nadège · Afro · 14"</b>
+          <img src={item.image ?? ""} alt={item.name} />
+          <b>{t("productLine")}</b>
         </div>
         <Button variant="outline" onClick={() => router.push("/tracking")}>
-          Voir le détail
+          {t("viewDetails")}
         </Button>
       </section>
     </main>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { SLOGAN } from "@/lib/brand";
 
 export type IconName =
   | "menu"
@@ -133,7 +134,7 @@ export function Logo({ light = false }: { light?: boolean }) {
       onClick={() => router.push("/")}
     >
       <span>Mandisa</span>
-      <small>Made to look like you.</small>
+      <small>{SLOGAN}</small>
       <i>logo placeholder</i>
     </button>
   );

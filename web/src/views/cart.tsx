@@ -1,92 +1,104 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { photos } from "@/lib/catalog";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
+import { useFormatPrice, useStatusLabel } from "@/lib/format";
 import { Button, Icon } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
+import { useCatalog } from "@/components/site-data-provider";
 
 export default function CartView() {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
+  const statusLabel = useStatusLabel();
+  const formatPrice = useFormatPrice();
   const router = useRouter();
   const { cartCount: count, setCartCount: setCount } = useShop();
+  // Mock cart: a single line with the first product until the real cart exists.
+  const item = useCatalog().find("MDS-W01");
   if (!count)
     return (
       <main className="page container empty">
         <div className="empty__icon">
           <Icon name="bag" />
         </div>
-        <h1>Votre panier est vide</h1>
-        <p>Votre prochaine allure vous attend dans la collection.</p>
-        <Button onClick={() => router.push("/shop")}>
-          Découvrir la collection
-        </Button>
+        <h1>{t("emptyTitle")}</h1>
+        <p>{t("emptyCopy")}</p>
+        <Button onClick={() => router.push("/shop")}>{t("discover")}</Button>
       </main>
     );
+  if (!item) return null;
+  const total = formatPrice(item.priceXaf * count);
   return (
     <main className="page container">
       <div className="breadcrumb">
-        Accueil / <b>Panier</b>
+        {tCommon("home")} / <b>{t("metaTitle")}</b>
       </div>
       <h1>
-        Votre panier <sup>({count})</sup>
+        {t.rich("title", { count, sup: (chunks) => <sup>{chunks}</sup> })}
       </h1>
       <div className="cart-layout">
         <section className="cart-items">
           <article className="line-item">
-            <img src={photos.afro} alt="Nadège" />
+            <img src={item.image ?? ""} alt={item.name} />
             <div>
-              <span className="tag">En stock</span>
-              <h3>Nadège</h3>
-              <p>Afro · 14" · Noir naturel · Bonnet M</p>
+              <span className="tag">{statusLabel(item)}</span>
+              <h3>{item.name}</h3>
+              <p>{t("lineVariant")}</p>
               <button className="remove" onClick={() => setCount(0)}>
-                Supprimer
+                {t("remove")}
               </button>
             </div>
             <div>
-              <strong>98 000 FCFA</strong>
+              <strong>{formatPrice(item.priceXaf)}</strong>
               <div className="quantity">
-                <button onClick={() => setCount(Math.max(1, count - 1))}>
+                <button
+                  aria-label={tCommon("decreaseQuantity")}
+                  onClick={() => setCount(Math.max(1, count - 1))}
+                >
                   <Icon name="minus" />
                 </button>
                 <span>{count}</span>
-                <button onClick={() => setCount(count + 1)}>
+                <button
+                  aria-label={tCommon("increaseQuantity")}
+                  onClick={() => setCount(count + 1)}
+                >
                   <Icon name="plus" />
                 </button>
               </div>
             </div>
           </article>
           <div className="promo">
-            <input placeholder="Code promo" />
-            <Button variant="outline">Appliquer</Button>
+            <input placeholder={t("promoPlaceholder")} />
+            <Button variant="outline">{t("apply")}</Button>
           </div>
         </section>
         <aside className="summary">
-          <h2>Récapitulatif</h2>
+          <h2>{t("summary")}</h2>
           <p>
-            <span>Sous-total</span>
-            <b>{(98000 * count).toLocaleString("fr-FR")} FCFA</b>
+            <span>{t("subtotal")}</span>
+            <b>{total}</b>
           </p>
           <p>
-            <span>Réduction</span>
+            <span>{t("discount")}</span>
             <b>—</b>
           </p>
           <p>
-            <span>Livraison</span>
-            <b>Gratuite à Douala</b>
+            <span>{t("delivery")}</span>
+            <b>{t("freeInDouala")}</b>
           </p>
           <hr />
           <p className="total">
-            <span>Total</span>
-            <b>{(98000 * count).toLocaleString("fr-FR")} FCFA</b>
+            <span>{t("total")}</span>
+            <b>{total}</b>
           </p>
           <Button onClick={() => router.push("/checkout")}>
-            Passer à la commande <Icon name="arrow" />
+            {t("checkout")} <Icon name="arrow" />
           </Button>
           <button onClick={() => router.push("/shop")}>
-            Continuer mes achats
+            {t("continueShopping")}
           </button>
-          <small>
-            Paiement intégral avant validation, sauf paiement à la livraison.
-          </small>
+          <small>{t("paymentNote")}</small>
         </aside>
       </div>
     </main>

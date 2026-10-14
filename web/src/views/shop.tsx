@@ -1,56 +1,60 @@
 "use client";
 
 import { useState } from "react";
-import { products } from "@/lib/catalog";
+import { useTranslations } from "next-intl";
+import { textures, type Texture } from "@/lib/catalog";
+import { useCatalog } from "@/components/site-data-provider";
 import { Button, Icon } from "@/components/ui";
 import ProductCard from "@/components/product-card";
 import { useShop } from "@/components/shop-provider";
 
+const refineKeys = ["length", "color", "capSize", "availability"] as const;
+
 export default function ShopView() {
+  const t = useTranslations("Shop");
+  const tCommon = useTranslations("Common");
+  const tCatalog = useTranslations("Catalog");
   const { setAssistantOpen } = useShop();
-  const [filter, setFilter] = useState("Toutes");
+  const { products } = useCatalog();
+  const [filter, setFilter] = useState<Texture | "all">("all");
   const visible =
-    filter === "Toutes"
-      ? products
-      : products.filter((p) => p.texture === filter);
+    filter === "all" ? products : products.filter((p) => p.texture === filter);
   return (
     <main className="page container">
       <div className="breadcrumb">
-        Accueil / <b>Boutique</b>
+        {tCommon("home")} / <b>{tCommon("shop")}</b>
       </div>
       <div className="page-heading">
         <div>
-          <span className="eyebrow">Collection 01</span>
-          <h1>La collection</h1>
-          <p>9 perruques prêtes à porter, aux textures naturelles.</p>
+          <span className="eyebrow">{t("eyebrow")}</span>
+          <h1>{t("title")}</h1>
+          <p>{t("intro", { count: products.length })}</p>
         </div>
         <div className="collection-number">
-          09 <span>modèles</span>
+          {String(products.length).padStart(2, "0")} <span>{t("models")}</span>
         </div>
       </div>
       <div className="filters">
-        {["Toutes", "Afro", "Kinky yaki", "Light yaki", "Bouclées"].map((x) => (
+        {(["all", ...textures] as const).map((x) => (
           <button
             className={filter === x ? "active" : ""}
             onClick={() => setFilter(x)}
             key={x}
           >
-            {x}
+            {x === "all" ? t("all") : tCatalog(`textures.${x}`)}
           </button>
         ))}
-        <button className="sort">Trier : Nouveautés</button>
+        <button className="sort">{t("sort")}</button>
       </div>
       <div className="shop-layout">
         <aside>
-          <b>Affiner</b>
-          {["Longueur", "Couleur", "Taille de bonnet", "Disponibilité"].map(
-            (x) => (
-              <button key={x}>
-                {x}
-                <Icon name="plus" />
-              </button>
-            ),
-          )}
+          <b>{t("refine")}</b>
+          {refineKeys.map((key) => (
+            <button key={key}>
+              {t(`refineOptions.${key}`)}
+              <Icon name="plus" />
+            </button>
+          ))}
         </aside>
         <div className="product-grid">
           {visible.map((p) => (
@@ -60,8 +64,8 @@ export default function ShopView() {
       </div>
       {visible.length === 0 && (
         <div className="empty">
-          <h2>Aucun résultat</h2>
-          <p>Essayez de modifier vos filtres.</p>
+          <h2>{t("empty.title")}</h2>
+          <p>{t("empty.copy")}</p>
         </div>
       )}
       <div className="help-banner">
@@ -69,12 +73,12 @@ export default function ShopView() {
           <Icon name="sparkle" />
         </div>
         <section>
-          <span className="eyebrow eyebrow--light">Conseil personnalisé</span>
-          <h2>Besoin d'aide pour choisir ?</h2>
-          <p>Décrivez le style que vous recherchez à notre assistante.</p>
+          <span className="eyebrow eyebrow--light">{t("help.eyebrow")}</span>
+          <h2>{t("help.title")}</h2>
+          <p>{t("help.copy")}</p>
         </section>
         <Button variant="light" onClick={() => setAssistantOpen(true)}>
-          Me faire conseiller
+          {t("help.cta")}
         </Button>
       </div>
     </main>

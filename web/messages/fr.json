@@ -1,0 +1,593 @@
+{
+  "Metadata": {
+    "title": "Mandisa — Made to look like you.",
+    "description": "Perruques premium prêtes à porter, aux textures naturelles, qui célèbrent la beauté noire avec une expérience d'achat simple et fluide."
+  },
+  "Common": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "addToCart": "Ajouter au panier",
+    "back": "Retour",
+    "decreaseQuantity": "Diminuer la quantité",
+    "increaseQuantity": "Augmenter la quantité",
+    "close": "Fermer"
+  },
+  "Catalog": {
+    "textures": {
+      "afro": "Afro",
+      "kinkyYaki": "Kinky yaki",
+      "lightYaki": "Light yaki",
+      "curly": "Bouclées"
+    },
+    "statuses": {
+      "inStock": "En stock",
+      "lowStock": "Plus que {count}",
+      "preorder": "Précommande",
+      "soldOut": "Rupture"
+    }
+  },
+  "Header": {
+    "announcement": "Livraison gratuite à Douala · Retrait possible à Bali · Précommande : fabrication de 4 à 6 semaines",
+    "nav": {
+      "shop": "Boutique",
+      "textures": "Textures",
+      "care": "Guide d'entretien",
+      "delivery": "Livraison & retours",
+      "about": "À propos",
+      "contact": "Contact"
+    },
+    "switchLanguage": "Changer de langue",
+    "search": "Rechercher",
+    "account": "Compte",
+    "cart": "Panier",
+    "menu": "Menu"
+  },
+  "Footer": {
+    "tagline": "Perruques prêtes à porter aux textures naturelles.",
+    "shopTitle": "Boutique",
+    "allWigs": "Toutes les perruques",
+    "helpTitle": "Aide",
+    "tracking": "Suivi de commande",
+    "delivery": "Livraison & retours",
+    "faq": "FAQ",
+    "care": "Guide d'entretien",
+    "contact": "Contact",
+    "contactTitle": "Contact",
+    "pickup": "Retrait : Bali, Douala",
+    "pickupDetail": "Derrière Somatel Hôtel",
+    "paymentMethods": "MTN MoMo · Orange Money · Carte · Virement",
+    "terms": "Conditions de vente",
+    "privacy": "Confidentialité",
+    "copyright": "© {year} Mandisa"
+  },
+  "Toast": {
+    "added": "Ajouté au panier",
+    "view": "Voir"
+  },
+  "Assistant": {
+    "name": "Assistante Mandisa",
+    "availability": "Disponible 24 h/24",
+    "inputPlaceholder": "Écrivez votre message…",
+    "open": "Besoin d'aide ?",
+    "close": "Fermer",
+    "preview": {
+      "greeting": "Bonjour ! Quelle texture recherchez-vous aujourd'hui ?",
+      "userMessage": "Une texture naturelle et facile à porter."
+    },
+    "panel": {
+      "greeting": "Bonjour ! Je peux vous aider à choisir votre perruque, vérifier la disponibilité, suivre votre commande ou préparer votre panier.",
+      "chips": {
+        "texture": "Quelle texture pour moi ?",
+        "availability": "Voir les disponibilités",
+        "tracking": "Suivre ma commande",
+        "care": "Entretien"
+      },
+      "userMessage": "Je cherche une perruque bouclée, longueur moyenne.",
+      "reply": "Syntiche pourrait beaucoup vous plaire. Souhaitez-vous un rendu plutôt défini ou aérien ?",
+      "viewProduct": "Voir le modèle",
+      "whatsapp": "Parler à une personne sur WhatsApp"
+    }
+  },
+  "ProductCard": {
+    "imageAlt": "{name}, perruque {texture}",
+    "fromPrice": "À partir de {price}",
+    "notifyMe": "Me prévenir"
+  },
+  "Home": {
+    "hero": {
+      "eyebrow": "Perruques prêtes à porter",
+      "imageAlt": "Portrait chaleureux d'une femme aux cheveux afro naturels",
+      "intro": "Des perruques premium aux textures naturelles, prêtes à porter, avec leurs accessoires offerts.",
+      "cta": "Découvrir la collection",
+      "advice": "Être conseillée",
+      "caption": "IMG_hero · Douala, Cameroun"
+    },
+    "trust": {
+      "readyToWear": "Prête à porter",
+      "accessories": "Accessoires offerts",
+      "freeDelivery": "Livraison gratuite à Douala",
+      "support": "Assistance 24 h/24"
+    },
+    "textures": {
+      "eyebrow": "Trouvez votre allure",
+      "title": "Choisissez votre texture",
+      "copy": "Des textures pensées pour célébrer la beauté naturelle, sans compromis.",
+      "imageAlt": "Texture {name}",
+      "cta": "Voir les modèles",
+      "descriptions": {
+        "afro": "Volume généreux, texture crépue naturelle.",
+        "kinkyYaki": "Une texture crépue lissée, souple et naturelle.",
+        "lightYaki": "Un yaki plus léger, doux et fluide.",
+        "curly": "Des boucles définies, pleines de mouvement."
+      }
+    },
+    "collection": {
+      "eyebrow": "Nouveautés",
+      "title": "La première collection",
+      "copy": "Neuf modèles, pensés pour vous ressembler.",
+      "cta": "Voir toute la collection"
+    },
+    "manifesto": {
+      "eyebrow": "Pourquoi Mandisa",
+      "title": "Une perruque ne devrait jamais vous déguiser. Elle devrait vous <em>révéler.</em>",
+      "pillars": {
+        "readyToWear": {
+          "title": "Prête à porter",
+          "text": "Pas de pose compliquée : vous la mettez, elle vous ressemble."
+        },
+        "accessories": {
+          "title": "Accessoires offerts",
+          "text": "Chaque perruque arrive avec ses accessoires dans son packaging."
+        },
+        "origin": {
+          "title": "Origine documentée",
+          "text": "Une fiche détaillée : origine, longueur, densité et poids."
+        },
+        "support": {
+          "title": "Accompagnement personnel",
+          "text": "Une assistante disponible, et une vraie personne sur WhatsApp."
+        }
+      }
+    },
+    "advisor": {
+      "eyebrow": "Conseillère Mandisa",
+      "title": "Pas sûre de votre choix ?",
+      "copy": "Notre assistante vous aide à choisir la texture, la longueur et le style qui vous correspondent, en français ou en anglais.",
+      "chips": {
+        "texture": "Quelle texture pour moi ?",
+        "length": "Quelle longueur choisir ?",
+        "order": "Où en est ma commande ?",
+        "care": "Comment entretenir ma perruque ?"
+      },
+      "cta": "Démarrer la conversation"
+    },
+    "how": {
+      "eyebrow": "Simple, du choix à la livraison",
+      "title": "Comment ça marche",
+      "steps": {
+        "choose": {
+          "title": "Choisissez",
+          "text": "Parcourez la collection ou demandez conseil à notre assistante."
+        },
+        "pay": {
+          "title": "Payez en toute simplicité",
+          "text": "MTN MoMo, Orange Money, carte, virement ou à la livraison."
+        },
+        "receive": {
+          "title": "Recevez",
+          "text": "Livraison gratuite à Douala et expédition au Cameroun et à l'international."
+        }
+      }
+    },
+    "care": {
+      "imageAlt": "Brosse et accessoires de soin sur tissu clair",
+      "eyebrow": "Le rituel Mandisa",
+      "title": "Prenez soin de votre perruque",
+      "copy": "Quelques gestes simples pour la garder belle, longtemps.",
+      "cta": "Lire le guide"
+    },
+    "newsletter": {
+      "eyebrow": "Le journal Mandisa",
+      "title": "Recevez nos nouveautés et nos offres",
+      "label": "Email ou WhatsApp",
+      "placeholder": "vous@exemple.com",
+      "submit": "S'inscrire",
+      "consent": "En continuant, j'accepte de recevoir les nouvelles Mandisa. Désinscription à tout moment."
+    }
+  },
+  "Shop": {
+    "metaTitle": "Boutique",
+    "eyebrow": "Collection 01",
+    "title": "La collection",
+    "intro": "{count} perruques prêtes à porter, aux textures naturelles.",
+    "models": "modèles",
+    "all": "Toutes",
+    "sort": "Trier : Nouveautés",
+    "refine": "Affiner",
+    "refineOptions": {
+      "length": "Longueur",
+      "color": "Couleur",
+      "capSize": "Taille de bonnet",
+      "availability": "Disponibilité"
+    },
+    "empty": {
+      "title": "Aucun résultat",
+      "copy": "Essayez de modifier vos filtres."
+    },
+    "help": {
+      "eyebrow": "Conseil personnalisé",
+      "title": "Besoin d'aide pour choisir ?",
+      "copy": "Décrivez le style que vous recherchez à notre assistante.",
+      "cta": "Me faire conseiller"
+    }
+  },
+  "Product": {
+    "imageAlt": "{name}, vue de face",
+    "galleryAlt": "{name}, vue {index}",
+    "videoAlt": "Vidéo du modèle {name}",
+    "indicativePrice": "*prix indicatif",
+    "length": "Longueur",
+    "color": "Couleur",
+    "colors": {
+      "naturalBlack": "Noir naturel",
+      "deepBrown": "Brun profond",
+      "warmBrown": "Brun chaud"
+    },
+    "capSize": "Taille de bonnet",
+    "sizeGuide": "Guide des tailles",
+    "stockTitle": "En stock — prête à expédier",
+    "stockNote": "Livraison gratuite à Douala",
+    "orderOnWhatsapp": "Commander sur WhatsApp",
+    "trust": {
+      "freeDelivery": "Livraison gratuite à Douala",
+      "returns": "Retour sous 24 h, selon conditions",
+      "securePayment": "Paiement sécurisé"
+    },
+    "accordions": {
+      "details": "Détails de la perruque",
+      "accessories": "Accessoires offerts",
+      "care": "Conseils d'entretien",
+      "delivery": "Livraison et retours"
+    },
+    "detailsText": "Texture : {texture} · Densité : 180 % · Lace : 13×4 · Origine et poids : à confirmer.",
+    "genericText": "Informations détaillées et recommandations Mandisa. Contenu à confirmer avec le fournisseur.",
+    "related": {
+      "eyebrow": "Dans le même esprit",
+      "title": "Vous aimerez aussi"
+    }
+  },
+  "Cart": {
+    "metaTitle": "Panier",
+    "emptyTitle": "Votre panier est vide",
+    "emptyCopy": "Votre prochaine allure vous attend dans la collection.",
+    "discover": "Découvrir la collection",
+    "title": "Votre panier <sup>({count})</sup>",
+    "lineVariant": "Afro · 14\" · Noir naturel · Bonnet M",
+    "remove": "Supprimer",
+    "promoPlaceholder": "Code promo",
+    "apply": "Appliquer",
+    "summary": "Récapitulatif",
+    "subtotal": "Sous-total",
+    "discount": "Réduction",
+    "delivery": "Livraison",
+    "freeInDouala": "Gratuite à Douala",
+    "total": "Total",
+    "checkout": "Passer à la commande",
+    "continueShopping": "Continuer mes achats",
+    "paymentNote": "Paiement intégral avant validation, sauf paiement à la livraison."
+  },
+  "Checkout": {
+    "metaTitle": "Commande",
+    "backToCart": "Retour au panier",
+    "steps": {
+      "info": "Informations",
+      "delivery": "Livraison",
+      "payment": "Paiement"
+    },
+    "stepOf": "Étape {step} sur {total}",
+    "info": {
+      "title": "Vos informations",
+      "guest": "Continuer sans compte",
+      "createAccount": "Créer un compte",
+      "firstName": "Prénom",
+      "firstNamePlaceholder": "Votre prénom",
+      "lastName": "Nom",
+      "lastNamePlaceholder": "Votre nom",
+      "phone": "Téléphone (WhatsApp)",
+      "phonePlaceholder": "+237 6•• ••• •••",
+      "email": "Email",
+      "emailPlaceholder": "vous@exemple.com",
+      "next": "Continuer vers la livraison"
+    },
+    "delivery": {
+      "title": "Mode de livraison",
+      "options": {
+        "douala": {
+          "title": "Douala, à domicile",
+          "detail": "Gratuite · objectif 1 h maximum [à confirmer]"
+        },
+        "bali": {
+          "title": "Retrait à Bali",
+          "detail": "Derrière Somatel Hôtel, après Hôtel Premium"
+        },
+        "otherCity": {
+          "title": "Autre ville du Cameroun",
+          "detail": "Tarif communiqué avant le paiement"
+        },
+        "international": {
+          "title": "International",
+          "detail": "Frais confirmés avant validation"
+        }
+      },
+      "district": "Quartier",
+      "districtPlaceholder": "Ex. Bonapriso",
+      "landmark": "Repère de livraison",
+      "landmarkPlaceholder": "Près de…",
+      "address": "Adresse",
+      "addressPlaceholder": "Rue, immeuble, étage",
+      "next": "Continuer vers le paiement"
+    },
+    "payment": {
+      "title": "Paiement",
+      "methods": {
+        "momo": {
+          "title": "MTN MoMo",
+          "detail": "Validation depuis votre téléphone"
+        },
+        "orange": {
+          "title": "Orange Money",
+          "detail": "Validation depuis votre téléphone"
+        },
+        "card": {
+          "title": "Carte bancaire",
+          "detail": "Visa, Mastercard"
+        },
+        "transfer": {
+          "title": "Virement bancaire",
+          "detail": "Preuve de paiement requise"
+        },
+        "delivery": {
+          "title": "Paiement à la livraison",
+          "detail": "Disponible à Douala"
+        }
+      },
+      "reference": "Référence de transaction",
+      "referencePlaceholder": "Référence",
+      "acceptTerms": "J'accepte les conditions de vente",
+      "marketingOptIn": "Je souhaite recevoir des offres par WhatsApp / email",
+      "note": "Votre commande est validée après réception du paiement.",
+      "confirm": "Confirmer et payer"
+    },
+    "summary": {
+      "title": "Votre commande",
+      "variant": "14\" · Noir · M",
+      "subtotal": "Sous-total",
+      "delivery": "Livraison",
+      "free": "Gratuite",
+      "total": "Total"
+    }
+  },
+  "Orders": {
+    "statuses": {
+      "paid": "Payée",
+      "preparing": "En préparation",
+      "ready": "Prête",
+      "shipped": "Expédiée",
+      "delivered": "Livrée"
+    }
+  },
+  "Confirmation": {
+    "metaTitle": "Commande confirmée",
+    "eyebrow": "Commande confirmée",
+    "title": "Merci, {name} !",
+    "body": "Votre commande n° <b>{orderNumber}</b> est enregistrée. Nous vous envoyons une confirmation par WhatsApp et par email.",
+    "variant": "Afro · 14\" · Bonnet M",
+    "delivery": "Livraison",
+    "deliveryValue": "Douala, à domicile",
+    "payment": "Paiement",
+    "total": "Total",
+    "track": "Suivre ma commande",
+    "backToShop": "Retour à la boutique"
+  },
+  "Tracking": {
+    "metaTitle": "Suivre ma commande",
+    "eyebrow": "Votre commande, pas à pas",
+    "title": "Suivre ma commande",
+    "intro": "Entrez votre numéro de commande et le téléphone utilisé lors de l'achat.",
+    "submit": "Suivre",
+    "inProgress": "En cours",
+    "orderTitle": "Commande {orderNumber}",
+    "destination": "Livraison à Bonapriso, Douala",
+    "upcoming": "À venir",
+    "events": {
+      "paid": {
+        "date": "18 juin · 10:32",
+        "text": "Votre paiement MTN MoMo a été confirmé."
+      },
+      "preparing": {
+        "date": "18 juin · 11:05",
+        "text": "Notre équipe prépare votre perruque et ses accessoires."
+      },
+      "ready": {
+        "text": "Vous serez avertie dès que votre commande sera prête."
+      }
+    },
+    "contact": "Contacter l'équipe sur WhatsApp"
+  },
+  "Account": {
+    "metaTitle": "Mon compte",
+    "eyebrow": "Votre espace",
+    "greeting": "Bonjour {name}, ravie de vous retrouver.",
+    "tabs": {
+      "orders": "Mes commandes",
+      "favorites": "Mes favoris",
+      "preferences": "Mes préférences",
+      "addresses": "Mes adresses"
+    },
+    "orderSummary": "{count, plural, one {# article} other {# articles}} · {total}",
+    "productLine": "Nadège · Afro · 14\"",
+    "viewDetails": "Voir le détail"
+  },
+  "Info": {
+    "care": {
+      "metaTitle": "Guide d'entretien",
+      "eyebrow": "Le rituel Mandisa",
+      "title": "Prenez soin de votre perruque",
+      "intro": "Quelques gestes simples pour garder votre perruque belle, longtemps.",
+      "items": {
+        "beforeWearing": {
+          "title": "Avant de la porter",
+          "text": "Préparez doucement la fibre avec vos doigts et ajustez le bonnet sans tirer sur la lace."
+        },
+        "washing": {
+          "title": "Le lavage",
+          "text": "Utilisez de l'eau tiède et des soins doux. Ne frottez pas : laissez tremper puis rincez délicatement."
+        },
+        "drying": {
+          "title": "Le séchage",
+          "text": "Tamponnez avec une serviette propre et laissez sécher naturellement sur un support adapté."
+        },
+        "styling": {
+          "title": "Le coiffage",
+          "text": "Démêlez des pointes vers les racines. La chaleur doit rester modérée et adaptée à la fibre."
+        },
+        "storage": {
+          "title": "Le rangement",
+          "text": "Rangez votre perruque propre, sèche et à l'abri du soleil, idéalement sur un support."
+        }
+      }
+    },
+    "delivery": {
+      "metaTitle": "Livraison et retours",
+      "eyebrow": "Service & sérénité",
+      "title": "Livraison et retours",
+      "intro": "Nous vous accompagnons avant, pendant et après votre commande.",
+      "items": {
+        "douala": {
+          "title": "Douala, à domicile",
+          "text": "Gratuite — objectif : en 1 h maximum [à confirmer]."
+        },
+        "bali": {
+          "title": "Retrait à Bali",
+          "text": "Derrière Somatel Hôtel, après Hôtel Premium."
+        },
+        "otherCities": {
+          "title": "Autres villes & international",
+          "text": "Tarif et délai confirmés avec vous avant le paiement."
+        },
+        "preorder": {
+          "title": "Précommande",
+          "text": "4 à 6 semaines de fabrication après paiement, puis expédition."
+        },
+        "returns": {
+          "title": "Retours & échanges",
+          "text": "Demande sous 24 h. La perruque doit être neuve, non portée et non modifiée, lace intacte, avec ses accessoires."
+        },
+        "damaged": {
+          "title": "Produit endommagé",
+          "text": "Envoyez-nous votre réclamation avec des photos : notre équipe vous proposera la meilleure solution."
+        }
+      }
+    },
+    "about": {
+      "metaTitle": "À propos",
+      "eyebrow": "Notre raison d'être",
+      "title": "Made to look like you.",
+      "intro": "Mandisa est une marque de perruques premium, prêtes à porter, aux textures naturelles. Notre promesse : une perruque qui vous ressemble.",
+      "items": {
+        "natural": {
+          "title": "Naturel",
+          "text": "Des textures qui célèbrent la beauté noire dans toute sa richesse."
+        },
+        "care": {
+          "title": "Soin",
+          "text": "Une attention portée au produit, à son origine et à chaque détail."
+        },
+        "trust": {
+          "title": "Confiance",
+          "text": "Se reconnaître, se sentir soi, et avancer avec assurance."
+        }
+      }
+    },
+    "cta": {
+      "careTitle": "Une question sur l'entretien ?",
+      "defaultTitle": "Besoin d'un conseil personnalisé ?",
+      "copy": "Notre assistante est disponible 24 h/24.",
+      "button": "Demander à l'assistante"
+    }
+  },
+  "Faq": {
+    "metaTitle": "FAQ",
+    "eyebrow": "Questions fréquentes",
+    "title": "Comment pouvons-nous vous aider ?",
+    "tabs": {
+      "ordering": "Commander",
+      "payment": "Paiement",
+      "delivery": "Livraison",
+      "returns": "Retours",
+      "care": "Entretien"
+    },
+    "questions": {
+      "howToOrder": "Comment passer commande ?",
+      "paymentMethods": "Quels moyens de paiement acceptez-vous ?",
+      "payOnDelivery": "Puis-je payer à la livraison ?",
+      "preorder": "Que veut dire « précommande » ?",
+      "deliveryTime": "Combien de temps pour être livrée ?",
+      "shipping": "Livrez-vous hors de Douala et à l'international ?",
+      "returns": "Puis-je retourner ou échanger ma perruque ?",
+      "care": "Comment entretenir ma perruque ?",
+      "human": "Puis-je parler à une personne ?"
+    },
+    "answer": "Notre équipe vous accompagne à chaque étape. Les informations peuvent varier selon la disponibilité, votre ville et le mode de paiement choisi.",
+    "help": {
+      "eyebrow": "Toujours une question ?",
+      "title": "Vous ne trouvez pas votre réponse ?",
+      "cta": "Écrire sur WhatsApp"
+    }
+  },
+  "Contact": {
+    "metaTitle": "Contact",
+    "eyebrow": "Nous sommes là",
+    "title": "Parlons-en",
+    "intro": "Une assistante répond 24 h/24. Une personne prend le relais sur WhatsApp.",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "instagram": "Instagram",
+      "tiktok": "TikTok"
+    },
+    "emailPending": "[adresse à créer]",
+    "cta": "Nous contacter",
+    "pickup": {
+      "eyebrow": "Retrait à Douala",
+      "address": "Bali, derrière Somatel Hôtel,<br></br>après Hôtel Premium."
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Votre nom",
+      "phone": "Téléphone",
+      "message": "Message",
+      "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+      "submit": "Envoyer le message"
+    }
+  },
+  "Legal": {
+    "metaTitle": "Conditions générales de vente",
+    "eyebrow": "Informations légales",
+    "title": "Conditions générales de vente",
+    "updated": "Dernière mise à jour : juin 2026",
+    "sections": {
+      "purpose": "Objet",
+      "orders": "Commandes et paiement",
+      "delivery": "Livraison",
+      "returns": "Retours et remboursements"
+    },
+    "placeholder": "[Texte à rédiger] Les présentes conditions décrivent les modalités applicables aux commandes effectuées sur le site Mandisa."
+  },
+  "NotFound": {
+    "metaTitle": "Page introuvable",
+    "title": "Page introuvable",
+    "copy": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "cta": "Retour à l'accueil"
+  }
+}

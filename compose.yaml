@@ -1,0 +1,22 @@
+# Development database only. Start with: docker compose up -d
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: mandisa-db
+    environment:
+      POSTGRES_USER: mandisa
+      POSTGRES_PASSWORD: mandisa
+      POSTGRES_DB: mandisa
+    ports:
+      # 5432 is often taken by other local projects.
+      - "5433:5432"
+    volumes:
+      - mandisa-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mandisa -d mandisa"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  mandisa-db-data:
