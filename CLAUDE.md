@@ -231,6 +231,7 @@ pnpm format
 ```
 
 - Textes UI : `web/messages/fr.json` et `en.json`.
+- Logs de l'API : pino (`api/src/logger.ts`). `LOG_LEVEL=debug` en dev (inclut chaque requête SQL), `info` en prod (JSON). Chaque requête a un `x-request-id`. Ne jamais logger de secrets ni de paramètres SQL (données personnelles).
 - Le web lit l'API uniquement côté serveur (`web/src/lib/api.ts`, cache `minutes`) ; le navigateur ne l'appelle jamais.
 - Toutes les images (produits et site) sont des URL stockées en base (`product_media`, `site_images`).
 

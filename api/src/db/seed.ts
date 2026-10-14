@@ -1,6 +1,7 @@
 // Development seed: the 9 wigs from the design, with placeholder prices, stock and copy.
 // Idempotent: re-running it resets these products' variants and media.
 import { eq } from "drizzle-orm";
+import { loggableError, logger } from "../logger.js";
 import { db, pool } from "./client.js";
 import { productMedia, products, siteImages, variants } from "./schema.js";
 
@@ -153,7 +154,10 @@ function stockFor(scenario: Scenario, length: number, capSize: string) {
   }
 }
 
+const log = logger.child({ module: "seed" });
+
 async function seed() {
+  log.info({ products: catalog.length }, "seeding started");
   await db.transaction(async (tx) => {
     for (const p of catalog) {
       const [product] = await tx
@@ -177,6 +181,7 @@ async function seed() {
         })
         .returning({ id: products.id });
       const productId = product!.id;
+      log.debug({ code: p.code, scenario: p.scenario }, "product upserted");
 
       await tx.delete(variants).where(eq(variants.productId, productId));
       await tx.insert(variants).values(
@@ -220,14 +225,18 @@ async function seed() {
         });
     }
   });
-  console.log(
-    `Seeded ${catalog.length} products and ${Object.keys(siteImageUrls).length} site images.`,
+  log.info(
+    {
+      products: catalog.length,
+      siteImages: Object.keys(siteImageUrls).length,
+    },
+    "seeding complete",
   );
 }
 
 seed()
   .catch((err: unknown) => {
-    console.error(err);
+    log.error({ err: loggableError(err) }, "seeding failed");
     process.exitCode = 1;
   })
   .finally(() => pool.end());
