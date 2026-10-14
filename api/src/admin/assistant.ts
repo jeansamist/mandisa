@@ -10,6 +10,7 @@ import {
   ASSISTANT_EFFORTS,
   ASSISTANT_MODELS,
   ASSISTANT_TOOLS,
+  configuredProviders,
   getAssistantConfig,
   hasApiKey,
   type AssistantConfigUpdate,
@@ -26,7 +27,9 @@ export async function adminGetAssistantConfig() {
       efforts: ASSISTANT_EFFORTS,
       tools: ASSISTANT_TOOLS,
     },
-    apiKeyConfigured: hasApiKey(),
+    // Key for the selected model's provider, and per provider for the model list.
+    apiKeyConfigured: hasApiKey(config.model),
+    providers: configuredProviders(),
   };
 }
 

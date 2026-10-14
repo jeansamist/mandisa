@@ -18,6 +18,7 @@ export default defineConfig({
       ELGIOPAY_WEBHOOK_SECRET: "whsec_test",
       ADMIN_WHATSAPP: "+237600000000",
       ANTHROPIC_API_KEY: "sk-test-dummy",
+      GEMINI_API_KEY: "gemini-test-dummy",
     },
   },
 });

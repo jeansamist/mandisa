@@ -5,10 +5,22 @@ import type { AssistantConfig } from "@/lib/ms-types";
 import { saveAssistantConfig } from "./actions";
 
 const modelNotes: Record<string, string> = {
-  "claude-opus-5-5": "Par défaut — le plus capable, le plus cher",
-  "claude-sonnet-5-5": "Rapide et moins cher, très bon pour la discussion",
   "claude-haiku-5-5":
-    "Le plus rapide et le moins cher (sans relais de sécurité automatique)",
+    "Par défaut — le plus petit, le plus rapide et le moins cher (sans relais automatique en cas de refus)",
+  "gemini-3.5-flash-lite":
+    "Google — le plus petit et le moins cher de Gemini, très rapide",
+  "gemini-3.8-flash": "Google — le Flash le plus récent, plus précis",
+  "claude-sonnet-5-5":
+    "Intermédiaire — plus précis, environ 20× le coût de Haiku",
+  "claude-opus-5-5": "Le plus capable — environ 40× le coût de Haiku",
+};
+
+const providerOf = (model: string) =>
+  model.startsWith("gemini-") ? ("gemini" as const) : ("anthropic" as const);
+const providerLabels = { anthropic: "Claude", gemini: "Gemini" };
+const providerKeys = {
+  anthropic: "ANTHROPIC_API_KEY",
+  gemini: "GEMINI_API_KEY",
 };
 
 const effortNotes: Record<string, string> = {
@@ -52,9 +64,11 @@ const errors: Record<string, string> = {
 export default function AssistantConfigForm({
   initial,
   options,
+  providers,
 }: {
   initial: AssistantConfig;
   options: { models: string[]; efforts: string[]; tools: string[] };
+  providers: { anthropic: boolean; gemini: boolean };
 }) {
   const [form, setForm] = useState({
     enabled: initial.enabled,
@@ -133,12 +147,25 @@ export default function AssistantConfigForm({
             >
               {options.models.map((m) => (
                 <option key={m} value={m}>
-                  {m}
+                  {providerLabels[providerOf(m)]} · {m}
+                  {providers[providerOf(m)] ? "" : " (clé manquante)"}
                 </option>
               ))}
             </select>
             <span className="text-xs font-normal text-ms-ink/60">
               {modelNotes[form.model]}
+            </span>
+            {!providers[providerOf(form.model)] && (
+              <span className="text-xs font-normal text-ms-error" role="alert">
+                Ajoutez <code>{providerKeys[providerOf(form.model)]}</code> dans{" "}
+                <code>api/.env</code> et redémarrez l&apos;API : sans clé, ce
+                modèle ne répond pas et l&apos;assistante est masquée sur le
+                site.
+              </span>
+            )}
+            <span className="text-xs font-normal text-ms-ink/50">
+              Les conversations en cours gardent leur modèle ; le changement
+              s&apos;applique aux nouvelles conversations.
             </span>
           </label>
           <label className="ms-label">

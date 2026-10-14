@@ -1,0 +1,1 @@
+ALTER TABLE "ai_config" ALTER COLUMN "model" SET DEFAULT 'claude-haiku-5-5';

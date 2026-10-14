@@ -35,6 +35,10 @@ const schema = z.object({
 
   // AI assistant (Claude API). Without a key, the site assistant is turned off.
   ANTHROPIC_API_KEY: z.string().optional(),
+  /** Only for keys not scoped to a workspace: the workspace to use (Console > Workspaces). */
+  ANTHROPIC_WORKSPACE_ID: z.string().optional(),
+  /** Google Gemini (Gemini models in /ms). Without a key, Gemini models are unavailable. */
+  GEMINI_API_KEY: z.string().optional(),
 
   /** Admin (/ms) session length. */
   ADMIN_SESSION_HOURS: z.coerce.number().int().positive().default(12),

@@ -91,7 +91,10 @@ export type AssistantConfig = {
 export type AssistantConfigResponse = {
   config: AssistantConfig;
   options: { models: string[]; efforts: string[]; tools: string[] };
+  /** Key present for the saved model's provider. */
   apiKeyConfigured: boolean;
+  /** Key present per provider (Claude: ANTHROPIC_API_KEY, Gemini: GEMINI_API_KEY). */
+  providers: { anthropic: boolean; gemini: boolean };
 };
 
 export type AiConversation = {

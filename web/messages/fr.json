@@ -428,7 +428,9 @@
       "awaitingPayment": {
         "eyebrow": "Paiement en attente",
         "title": "Validez le paiement sur votre téléphone",
-        "copy": "Une demande de paiement de {total} a été envoyée au numéro se terminant par {hint}. Confirmez-la avec votre code secret. Cette page se met à jour automatiquement."
+        "copy": "Une demande de paiement de {total} a été envoyée au numéro se terminant par {hint}. Confirmez-la avec votre code secret. Cette page se met à jour automatiquement.",
+        "stillWaiting": "Nous n'avons pas encore reçu la confirmation de votre paiement. Si vous l'avez validé, vérifiez à nouveau dans un instant.",
+        "checkAgain": "Vérifier à nouveau"
       },
       "paymentFailed": {
         "eyebrow": "Paiement non abouti",

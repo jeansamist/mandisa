@@ -1,4 +1,4 @@
-import { and, asc, eq, gt, isNotNull, isNull, lt, or } from "drizzle-orm";
+import { and, asc, eq, gt, isNotNull, isNull, lt, or, sql } from "drizzle-orm";
 import { db } from "../db/client.js";
 import { payments } from "../db/schema.js";
 import { elgiopay } from "../integrations/elgiopay.js";
@@ -10,7 +10,9 @@ const log = logger.child({ module: "payments" });
 /** How long a pending payment keeps being checked with ElgioPay. */
 const CHECK_WINDOW_MS = 24 * 3_600_000;
 /** Minimum time between two checks of the same payment. */
-const MIN_INTERVAL_MS = 5_000;
+const MIN_INTERVAL_MS = 10_000;
+/** A payment is checked with the provider at most this many times (then the webhook or a retry takes over). */
+export const MAX_STATUS_CHECKS = 30;
 
 /**
  * Asks ElgioPay for the status of one pending payment (server to server, with
@@ -31,21 +33,34 @@ export async function checkPaymentStatus(paymentId: number) {
     return "skipped" as const;
   }
 
+  if (payment.statusChecks >= MAX_STATUS_CHECKS)
+    return "check_limit_reached" as const;
+
   // Claim the check first so concurrent callers (job + page refresh) don't both call ElgioPay.
   const claimed = await db
     .update(payments)
-    .set({ lastCheckedAt: new Date() })
+    .set({
+      lastCheckedAt: new Date(),
+      statusChecks: sql`${payments.statusChecks} + 1`,
+    })
     .where(
       and(
         eq(payments.id, paymentId),
+        lt(payments.statusChecks, MAX_STATUS_CHECKS),
         or(
           isNull(payments.lastCheckedAt),
           lt(payments.lastCheckedAt, new Date(Date.now() - MIN_INTERVAL_MS)),
         ),
       ),
     )
-    .returning({ id: payments.id });
+    .returning({ id: payments.id, statusChecks: payments.statusChecks });
   if (claimed.length === 0) return "recently_checked" as const;
+  if (claimed[0]!.statusChecks === MAX_STATUS_CHECKS) {
+    log.info(
+      { paymentId },
+      `last of ${MAX_STATUS_CHECKS} payment status checks`,
+    );
+  }
 
   const remote = await elgiopay.getPayment(payment.providerReference);
   log.debug(
@@ -86,6 +101,7 @@ export async function checkPendingPayments(limit = 20) {
         eq(payments.provider, "elgiopay"),
         eq(payments.status, "pending"),
         isNotNull(payments.providerReference),
+        lt(payments.statusChecks, MAX_STATUS_CHECKS),
         gt(payments.createdAt, new Date(Date.now() - CHECK_WINDOW_MS)),
       ),
     )

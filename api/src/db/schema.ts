@@ -330,6 +330,8 @@ export const payments = pgTable(
     completedAt: timestamp("completed_at", { withTimezone: true }),
     /** Last status check with the provider (polling). */
     lastCheckedAt: timestamp("last_checked_at", { withTimezone: true }),
+    /** Status checks made with the provider; capped (see payment-status-check.ts). */
+    statusChecks: integer("status_checks").notNull().default(0),
   },
   (t) => [
     uniqueIndex("payments_provider_reference_idx")
@@ -570,7 +572,7 @@ export const aiConfig = pgTable(
   {
     id: integer("id").primaryKey().default(1),
     enabled: boolean("enabled").notNull().default(true),
-    model: text("model").notNull().default("claude-opus-5-5"),
+    model: text("model").notNull().default("claude-haiku-5-5"),
     effort: text("effort").notNull().default("low"),
     /** Extra instructions from the founder (tone, priorities…). */
     instructions: text("instructions").notNull().default(""),
@@ -598,6 +600,8 @@ export const aiConversations = pgTable(
     visitorId: uuid("visitor_id"),
     locale: text("locale").notNull(),
     status: aiConversationStatusEnum("status").notNull().default("open"),
+    /** Model the conversation runs on (history is stored in that provider's format). */
+    model: text("model"),
     /** First customer message, shortened, for lists. */
     title: text("title"),
     messageCount: integer("message_count").notNull().default(0),

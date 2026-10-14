@@ -117,8 +117,10 @@ function every(name: string, ms: number, job: () => Promise<number>) {
 /** Background work of the API process. Returns a function that stops it. */
 export function startJobs() {
   const timers = [
-    every("notifications", 5_000, () => processOutbox()),
-    every("payment-status", 10_000, () => checkPendingPayments()),
+    // At most one database check every 30 s per job, so the database is not polled constantly.
+    // The confirmation page also checks its own payment on demand, so customers don't wait 30 s.
+    every("notifications", 30_000, () => processOutbox()),
+    every("payment-status", 30_000, () => checkPendingPayments()),
     every("expire-reservations", 60_000, expireReservations),
     every("cancel-unpaid-orders", 10 * 60_000, cancelUnpaidOrders),
   ];

@@ -1,0 +1,1 @@
+ALTER TABLE "payments" ADD COLUMN "status_checks" integer DEFAULT 0 NOT NULL;

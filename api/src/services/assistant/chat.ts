@@ -1,26 +1,29 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { and, asc, count, eq, gt, isNotNull, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "../../db/client.js";
 import { aiActions, aiConversations, aiMessages } from "../../db/schema.js";
-import { env } from "../../env.js";
 import { loggableError, logger } from "../../logger.js";
 import type { ProductSummary } from "../catalog.js";
 import { CheckoutError } from "../errors.js";
-import { getAssistantConfig } from "./config.js";
+import { claudeUserContent, runClaudeTurn } from "./claude.js";
 import {
-  runTool,
-  toolDefinitions,
-  whatsappNumber,
-  type ToolContext,
-} from "./tools.js";
+  configuredProviders,
+  getAssistantConfig,
+  providerOf,
+} from "./config.js";
+import { geminiUserContent, runGeminiTurn } from "./gemini.js";
+import { runTool, whatsappNumber, type ToolContext } from "./tools.js";
+import type { TurnInput } from "./turn.js";
+
+// Re-exported for tests.
+export { assistantModel } from "./claude.js";
+export { geminiModel } from "./gemini.js";
 
 const log = logger.child({ module: "assistant" });
 
 const MAX_MESSAGE_LENGTH = 1000;
 const MAX_MESSAGES_PER_CONVERSATION = 40;
 const MAX_MESSAGES_PER_VISITOR_PER_HOUR = 60;
-const MAX_TOOL_ROUNDS = 6;
 
 export const sendMessageSchema = z.object({
   conversationId: z.string().uuid().nullish(),
@@ -50,10 +53,7 @@ Style
 - Warm, refined and natural, never pushy. Keep answers short for a phone screen: two to four sentences, plain text, no headings or tables.
 - The slogan "Made to look like you." is always written in English.`;
 
-function systemPrompt(
-  config: { instructions: string; knowledge: string },
-  locale: string,
-) {
+function systemPrompt(config: { instructions: string }, locale: string) {
   const stable = [
     RULES,
     config.instructions.trim() &&
@@ -61,48 +61,16 @@ function systemPrompt(
   ]
     .filter(Boolean)
     .join("\n\n");
-  return [
-    {
-      type: "text" as const,
-      text: stable,
-      cache_control: { type: "ephemeral" as const },
-    },
-    {
-      type: "text" as const,
-      text: `Site language: ${locale === "en" ? "English" : "French"}.`,
-    },
-  ];
+  return {
+    stable,
+    locale: `Site language: ${locale === "en" ? "English" : "French"}.`,
+  };
 }
-
-let client: Anthropic | null = null;
-function anthropic() {
-  if (!env.ANTHROPIC_API_KEY)
-    throw new CheckoutError("assistant_unavailable", undefined, 503);
-  client ??= new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-  return client;
-}
-
-/** The Claude call, behind an object so tests can replace it. */
-export const assistantModel = {
-  create: async (
-    params: Anthropic.Beta.MessageCreateParamsNonStreaming,
-  ): Promise<Anthropic.Beta.BetaMessage> =>
-    anthropic().beta.messages.create(params),
-};
 
 const fallbackReply = (locale: string) =>
   locale === "en"
     ? `Sorry, I can't answer that right now. Our team can help you on WhatsApp: ${whatsappNumber()}.`
     : `Désolée, je ne peux pas répondre pour le moment. Notre équipe vous répond sur WhatsApp : ${whatsappNumber()}.`;
-
-function visibleText(content: Anthropic.Beta.BetaContentBlock[]) {
-  const text = content
-    .filter((b): b is Anthropic.Beta.BetaTextBlock => b.type === "text")
-    .map((b) => b.text)
-    .join("\n")
-    .trim();
-  return text || null;
-}
 
 async function checkLimits(
   conversationId: string | null,
@@ -144,12 +112,14 @@ async function checkLimits(
 }
 
 /**
- * One customer message: stores it, runs Claude with the read-only tools until
- * it answers, stores every API turn (append-only), and returns the answer.
+ * One customer message: stores it, runs the configured model (Claude or
+ * Gemini) with the read-only tools until it answers, stores every provider
+ * turn (append-only), and returns the answer.
  */
 export async function sendMessage(input: z.infer<typeof sendMessageSchema>) {
   const config = await getAssistantConfig();
-  if (!config.enabled || !env.ANTHROPIC_API_KEY) {
+  const providers = configuredProviders();
+  if (!config.enabled || !providers[providerOf(config.model)]) {
     throw new CheckoutError("assistant_unavailable", undefined, 503);
   }
 
@@ -164,6 +134,16 @@ export async function sendMessage(input: z.infer<typeof sendMessageSchema>) {
     : undefined;
   if (conversation && conversation.visitorId !== (input.visitorId ?? null))
     conversation = undefined;
+  // A conversation keeps its model (its history is in that provider's format).
+  // Conversations from before multi-provider support were Claude conversations.
+  const conversationModel =
+    conversation?.model ??
+    (providerOf(config.model) === "anthropic" ? config.model : null);
+  if (
+    conversation &&
+    (!conversationModel || !providers[providerOf(conversationModel)])
+  )
+    conversation = undefined;
 
   await checkLimits(conversation?.id ?? null, input.visitorId ?? null);
 
@@ -173,28 +153,30 @@ export async function sendMessage(input: z.infer<typeof sendMessageSchema>) {
       .values({
         visitorId: input.visitorId ?? null,
         locale: input.locale,
+        model: config.model,
         title: input.message.slice(0, 120),
       })
       .returning();
   }
   const conversationId = conversation!.id;
+  const model = conversation!.model ?? conversationModel ?? config.model;
+  const provider = providerOf(model);
 
   await db.insert(aiMessages).values({
     conversationId,
     role: "user",
-    content: [{ type: "text", text: input.message }],
+    content:
+      provider === "gemini"
+        ? geminiUserContent(input.message)
+        : claudeUserContent(input.message),
     text: input.message,
   });
 
   const history = await db
-    .select()
+    .select({ role: aiMessages.role, content: aiMessages.content })
     .from(aiMessages)
     .where(eq(aiMessages.conversationId, conversationId))
     .orderBy(asc(aiMessages.id));
-  const messages: Anthropic.Beta.BetaMessageParam[] = history.map((m) => ({
-    role: m.role as "user" | "assistant",
-    content: m.content as Anthropic.Beta.BetaMessageParam["content"],
-  }));
 
   const ctx: ToolContext = {
     conversationId,
@@ -203,122 +185,51 @@ export async function sendMessage(input: z.infer<typeof sendMessageSchema>) {
     products: new Map<string, ProductSummary>(),
     handedOff: conversation!.status === "handed_off",
   };
-  const tools = toolDefinitions.filter((t) =>
-    config.enabledTools.includes(t.name),
-  );
-  // Claude Haiku 5.5 has no server-side refusal fallback; the other models use Anthropic's default routing.
-  const fallback =
-    config.model === "claude-haiku-5-5"
-      ? {}
-      : { fallbacks: "default" as const };
 
-  let reply: string | null = null;
-  let inputTokens = 0;
-  let outputTokens = 0;
-
-  try {
-    for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
-      const response = await assistantModel.create({
-        model: config.model,
-        max_tokens: 16000,
-        betas:
-          config.model === "claude-haiku-5-5"
-            ? []
-            : ["server-side-fallback-2026-07-01"],
-        ...fallback,
-        output_config: { effort: config.effort as "low" | "medium" | "high" },
-        system: systemPrompt(config, input.locale),
-        tools,
-        messages,
-      });
-      inputTokens +=
-        response.usage.input_tokens +
-        (response.usage.cache_read_input_tokens ?? 0) +
-        (response.usage.cache_creation_input_tokens ?? 0);
-      outputTokens += response.usage.output_tokens;
-
-      // Refused or cut off: keep the history clean (nothing half-finished is stored).
-      if (response.stop_reason === "refusal") {
-        log.warn(
-          { conversationId, category: response.stop_details?.category },
-          "assistant refused",
-        );
-        break;
-      }
-      const toolUses = response.content.filter(
-        (b): b is Anthropic.Beta.BetaToolUseBlock => b.type === "tool_use",
-      );
-      if (response.stop_reason === "max_tokens" && toolUses.length > 0) {
-        log.warn(
-          { conversationId },
-          "assistant tool call truncated at max_tokens",
-        );
-        break;
-      }
-
-      await db.insert(aiMessages).values({
-        conversationId,
-        role: "assistant",
-        content: response.content,
-        text: visibleText(response.content),
-      });
-      messages.push({ role: "assistant", content: response.content });
-
-      if (toolUses.length === 0) {
-        reply = visibleText(response.content);
-        break;
-      }
-
-      const results: Anthropic.Beta.BetaToolResultBlockParam[] = [];
-      for (const call of toolUses) {
-        let content: string;
-        let isError = false;
-        try {
-          if (!config.enabledTools.includes(call.name))
-            throw new Error("tool disabled");
-          content = JSON.stringify(await runTool(call.name, call.input, ctx));
-        } catch (err) {
-          isError = true;
-          content = JSON.stringify({
-            error: err instanceof z.ZodError ? "invalid_input" : "tool_failed",
-          });
-          log.warn(
-            { err: loggableError(err), tool: call.name, conversationId },
-            "assistant tool failed",
-          );
-        }
-        await db.insert(aiActions).values({
-          conversationId,
-          tool: call.name,
-          input: call.input,
-          isError,
-          resultSummary: content.slice(0, 500),
-        });
-        results.push({
-          type: "tool_result",
-          tool_use_id: call.id,
-          content,
-          is_error: isError,
-        });
-      }
-      // All results of a turn go back in a single user message.
+  const turn: TurnInput = {
+    conversationId,
+    model,
+    effort: config.effort as TurnInput["effort"],
+    system: systemPrompt(config, input.locale),
+    enabledTools: config.enabledTools,
+    history,
+    store: async (role, content, text) => {
       await db
         .insert(aiMessages)
-        .values({ conversationId, role: "user", content: results, text: null });
-      messages.push({ role: "user", content: results });
-    }
-  } catch (err) {
-    if (err instanceof Anthropic.RateLimitError) {
-      log.warn({ conversationId }, "assistant rate limited by the Claude API");
-    } else if (err instanceof Anthropic.APIError) {
-      log.error(
-        { err: loggableError(err), status: err.status, conversationId },
-        "assistant API error",
-      );
-    } else {
-      throw err;
-    }
-  }
+        .values({ conversationId, role, content, text });
+    },
+    callTool: async (name, toolInput) => {
+      let content: string;
+      let isError = false;
+      try {
+        if (!config.enabledTools.includes(name))
+          throw new Error("tool disabled");
+        content = JSON.stringify(await runTool(name, toolInput, ctx));
+      } catch (err) {
+        isError = true;
+        content = JSON.stringify({
+          error: err instanceof z.ZodError ? "invalid_input" : "tool_failed",
+        });
+        log.warn(
+          { err: loggableError(err), tool: name, conversationId },
+          "assistant tool failed",
+        );
+      }
+      await db.insert(aiActions).values({
+        conversationId,
+        tool: name,
+        input: toolInput,
+        isError,
+        resultSummary: content.slice(0, 500),
+      });
+      return { content, isError };
+    },
+  };
+
+  const { reply, inputTokens, outputTokens } =
+    provider === "gemini"
+      ? await runGeminiTurn(turn)
+      : await runClaudeTurn(turn);
 
   await db
     .update(aiConversations)
@@ -331,7 +242,13 @@ export async function sendMessage(input: z.infer<typeof sendMessageSchema>) {
     .where(eq(aiConversations.id, conversationId));
 
   log.info(
-    { conversationId, inputTokens, outputTokens, answered: Boolean(reply) },
+    {
+      conversationId,
+      model,
+      inputTokens,
+      outputTokens,
+      answered: Boolean(reply),
+    },
     "assistant replied",
   );
   return {

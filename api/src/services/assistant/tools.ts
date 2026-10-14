@@ -120,8 +120,8 @@ export const toolDefinitions: Anthropic.Beta.BetaTool[] = [
 
 const inputs = {
   search_catalog: z.object({
-    texture: z.enum(["afro", "kinkyYaki", "lightYaki", "curly"]).nullable(),
-    max_price_xaf: z.number().int().positive().nullable(),
+    texture: z.enum(["afro", "kinkyYaki", "lightYaki", "curly"]).nullish(),
+    max_price_xaf: z.number().int().positive().nullish(),
     available_only: z.boolean(),
   }),
   get_product_details: z.object({ product_code: z.string().trim().max(32) }),

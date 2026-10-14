@@ -428,7 +428,9 @@
       "awaitingPayment": {
         "eyebrow": "Payment pending",
         "title": "Approve the payment on your phone",
-        "copy": "A payment request of {total} was sent to the number ending in {hint}. Confirm it with your PIN. This page updates automatically."
+        "copy": "A payment request of {total} was sent to the number ending in {hint}. Confirm it with your PIN. This page updates automatically.",
+        "stillWaiting": "We haven't received your payment confirmation yet. If you approved it, check again in a moment.",
+        "checkAgain": "Check again"
       },
       "paymentFailed": {
         "eyebrow": "Payment not completed",

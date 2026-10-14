@@ -23,6 +23,7 @@ import { handleElgioPayWebhook } from "./payment-webhooks.js";
 import {
   checkPaymentStatus,
   checkPendingPayments,
+  MAX_STATUS_CHECKS,
 } from "./payment-status-check.js";
 import { quoteCart } from "./quote.js";
 
@@ -462,6 +463,24 @@ describe("payment status checks (polling ElgioPay)", () => {
     await checkPendingPayments();
     const [payment] = await db.select().from(payments);
     expect(payment).toMatchObject({ status: "failed", failureCode: "9201" });
+  });
+
+  it("stops checking a payment after 30 attempts", async () => {
+    await createOrder(orderInput());
+    remoteStatus("pending");
+    const [payment] = await db.select().from(payments);
+
+    for (let i = 0; i < MAX_STATUS_CHECKS; i++) {
+      // Make every attempt due (the 10 s spacing is tested above).
+      await db.update(payments).set({ lastCheckedAt: null });
+      expect(await checkPaymentStatus(payment!.id)).toBe("pending");
+    }
+    await db.update(payments).set({ lastCheckedAt: null });
+    expect(await checkPaymentStatus(payment!.id)).toBe("check_limit_reached");
+    expect(await checkPendingPayments()).toBe(0);
+    expect(getPayment).toHaveBeenCalledTimes(MAX_STATUS_CHECKS);
+    const [saved] = await db.select().from(payments);
+    expect(saved!.statusChecks).toBe(MAX_STATUS_CHECKS);
   });
 
   it("refuses to mark paid when the amount differs", async () => {

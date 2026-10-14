@@ -10,8 +10,9 @@ import { useFormatPrice } from "@/lib/format";
 import { Button, Icon } from "@/components/ui";
 import { useVariantLabel } from "@/views/cart";
 
-const POLL_MS = 4000;
-const POLL_FOR_MS = 5 * 60_000;
+const POLL_MS = 6000;
+/** Same cap as the API's payment status checks: at most 30 refreshes per run. */
+const MAX_POLLS = 30;
 
 type DeliveryCode =
   "douala_home" | "bali_pickup" | "other_city" | "international";
@@ -44,6 +45,8 @@ function useOrder(number: string, token: string) {
   const [notFound, setNotFound] = useState(false);
   // Bumped after a payment retry to start polling again.
   const [run, setRun] = useState(0);
+  // True once the 30 refreshes are used up while the payment is still pending.
+  const [pollingStopped, setPollingStopped] = useState(false);
 
   useEffect(() => {
     if (!number || !token) {
@@ -53,7 +56,8 @@ function useOrder(number: string, token: string) {
     }
     let stopped = false;
     let timer: number | undefined;
-    const startedAt = Date.now();
+    let polls = 0;
+    setPollingStopped(false);
 
     const load = async () => {
       const result = await getOrder(number, token);
@@ -64,9 +68,10 @@ function useOrder(number: string, token: string) {
         setOrder(result.data);
         if (stateOf(result.data) !== "awaitingPayment") return;
       }
-      // The webhook marks the order paid on the server; keep checking for a while.
-      if (Date.now() - startedAt < POLL_FOR_MS)
-        timer = window.setTimeout(load, POLL_MS);
+      // The API settles the payment (status check or webhook); refresh up to 30 times.
+      polls += 1;
+      if (polls < MAX_POLLS) timer = window.setTimeout(load, POLL_MS);
+      else setPollingStopped(true);
     };
     void load();
     return () => {
@@ -75,7 +80,12 @@ function useOrder(number: string, token: string) {
     };
   }, [number, token, run]);
 
-  return { order, notFound, restart: () => setRun((r) => r + 1) };
+  return {
+    order,
+    notFound,
+    pollingStopped,
+    restart: () => setRun((r) => r + 1),
+  };
 }
 
 export default function ConfirmationView() {
@@ -87,7 +97,7 @@ export default function ConfirmationView() {
   const params = useSearchParams();
   const number = params.get("order") ?? "";
   const token = params.get("token") ?? "";
-  const { order, notFound, restart } = useOrder(number, token);
+  const { order, notFound, pollingStopped, restart } = useOrder(number, token);
   const [retryPhone, setRetryPhone] = useState("");
   const [retrying, setRetrying] = useState(false);
   const [retryError, setRetryError] = useState<string | null>(null);
@@ -160,12 +170,22 @@ export default function ConfirmationView() {
         <div className="notice">
           <h2>{t(`states.${state}.title`)}</h2>
           {state === "awaitingPayment" && (
-            <p>
-              {t("states.awaitingPayment.copy", {
-                total,
-                hint: order.payment?.phoneHint ?? "",
-              })}
-            </p>
+            <>
+              <p>
+                {t("states.awaitingPayment.copy", {
+                  total,
+                  hint: order.payment?.phoneHint ?? "",
+                })}
+              </p>
+              {pollingStopped && (
+                <>
+                  <p>{t("states.awaitingPayment.stillWaiting")}</p>
+                  <Button variant="outline" onClick={restart}>
+                    {t("states.awaitingPayment.checkAgain")}
+                  </Button>
+                </>
+              )}
+            </>
           )}
           {state === "paymentFailed" && (
             <>

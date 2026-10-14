@@ -4,12 +4,29 @@ import { db } from "../../db/client.js";
 import { aiConfig } from "../../db/schema.js";
 import { env } from "../../env.js";
 
-// Models offered in /ms. Claude Haiku 5.5 has no server-side refusal fallback.
+// Models offered in /ms, smallest first. Default: Claude Haiku 5.5 (cheapest, fastest),
+// chosen by the founder. Claude Haiku 5.5 has no server-side refusal fallback.
 export const ASSISTANT_MODELS = [
-  "claude-opus-5-5",
-  "claude-sonnet-5-5",
   "claude-haiku-5-5",
+  "gemini-3.5-flash-lite",
+  "gemini-3.8-flash",
+  "claude-sonnet-5-5",
+  "claude-opus-5-5",
 ] as const;
+
+export type AssistantProvider = "anthropic" | "gemini";
+
+export function providerOf(model: string): AssistantProvider {
+  return model.startsWith("gemini-") ? "gemini" : "anthropic";
+}
+
+/** Which providers have an API key in api/.env. */
+export function configuredProviders(): Record<AssistantProvider, boolean> {
+  return {
+    anthropic: Boolean(env.ANTHROPIC_API_KEY),
+    gemini: Boolean(env.GEMINI_API_KEY),
+  };
+}
 export const ASSISTANT_EFFORTS = ["low", "medium", "high"] as const;
 export const ASSISTANT_TOOLS = [
   "search_catalog",
@@ -48,7 +65,7 @@ WhatsApp : +237 650 911 804. Une personne prend le relais sur WhatsApp.`;
 
 const DEFAULTS = {
   enabled: true,
-  model: "claude-opus-5-5",
+  model: "claude-haiku-5-5",
   effort: "low",
   instructions: "",
   knowledge: DEFAULT_KNOWLEDGE,
@@ -85,15 +102,16 @@ export async function getAssistantConfig() {
   );
 }
 
-export function hasApiKey() {
-  return Boolean(env.ANTHROPIC_API_KEY);
+/** True when the configured model's provider has an API key. */
+export function hasApiKey(model: string) {
+  return configuredProviders()[providerOf(model)];
 }
 
 /** What the site needs to show (or hide) the assistant. */
 export async function publicAssistantConfig() {
   const config = await getAssistantConfig();
   return {
-    available: config.enabled && hasApiKey(),
+    available: config.enabled && hasApiKey(config.model),
     greeting: { fr: config.greetingFr, en: config.greetingEn },
   };
 }

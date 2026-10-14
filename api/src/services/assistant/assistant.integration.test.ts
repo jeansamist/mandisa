@@ -5,11 +5,13 @@ import { resetDatabase } from "../../../test/fixtures.js";
 import { db, pool } from "../../db/client.js";
 import {
   aiActions,
+  aiConfig,
   aiConversations,
   aiMessages,
   notifications,
 } from "../../db/schema.js";
 import { assistantModel, sendMessage } from "./chat.js";
+import { getAssistantConfig } from "./config.js";
 
 type Reply = Partial<Anthropic.Beta.BetaMessage> & {
   content: Anthropic.Beta.BetaContentBlock[];
@@ -87,8 +89,9 @@ describe("site assistant", () => {
       "assistant",
       "user",
     ]);
-    expect(secondCall.fallbacks).toBe("default");
-    expect(secondCall.betas).toEqual(["server-side-fallback-2026-07-01"]);
+    // Default model: Claude Haiku 5.5, which has no server-side refusal fallback.
+    expect(secondCall.model).toBe("claude-haiku-5-5");
+    expect(secondCall.fallbacks).toBeUndefined();
 
     const stored = await db
       .select()
@@ -103,6 +106,15 @@ describe("site assistant", () => {
     ]);
     const [action] = await db.select().from(aiActions);
     expect(action).toMatchObject({ tool: "search_catalog", isError: false });
+  });
+
+  it("enables the server-side refusal fallback on larger models", async () => {
+    await getAssistantConfig();
+    await db.update(aiConfig).set({ model: "claude-sonnet-5-5" });
+    queue(reply({ content: [text("Bonjour !")] }));
+    await sendMessage({ locale: "fr", visitorId, message: "Bonjour" });
+    expect(sent[0]!.fallbacks).toBe("default");
+    expect(sent[0]!.betas).toEqual(["server-side-fallback-2026-07-01"]);
   });
 
   it("continues the same conversation for the same visitor only", async () => {
