@@ -1,4 +1,4 @@
-import type Anthropic from "@anthropic-ai/sdk";
+import { type Anthropic } from "@anthropic-ai/sdk";
 import { asc, eq } from "drizzle-orm";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetDatabase } from "../../../test/fixtures.js";

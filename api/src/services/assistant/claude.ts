@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { Anthropic } from "@anthropic-ai/sdk";
 import { env } from "../../env.js";
 import { loggableError, logger } from "../../logger.js";
 import { CheckoutError } from "../errors.js";

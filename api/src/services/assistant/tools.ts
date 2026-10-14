@@ -1,4 +1,4 @@
-import type Anthropic from "@anthropic-ai/sdk";
+import { type Anthropic } from "@anthropic-ai/sdk";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "../../db/client.js";
