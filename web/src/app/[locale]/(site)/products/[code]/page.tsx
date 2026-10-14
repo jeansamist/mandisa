@@ -14,10 +14,15 @@ export async function generateStaticParams() {
   return products.map((p) => ({ code: p.code.toLowerCase() }));
 }
 
+/** The product for a URL code; the placeholder never reaches the API. */
+async function findProduct(code: string) {
+  return code === NO_PRODUCT ? null : getProduct(code);
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/products/[code]">): Promise<Metadata> {
-  const product = await getProduct((await params).code);
+  const product = await findProduct((await params).code);
   return { title: product?.name };
 }
 
@@ -35,7 +40,7 @@ export default function Page({
 async function Product({
   params,
 }: Pick<PageProps<"/[locale]/products/[code]">, "params">) {
-  const product = await getProduct((await params).code);
+  const product = await findProduct((await params).code);
   if (!product) notFound();
   return <ProductView product={product} />;
 }

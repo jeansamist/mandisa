@@ -25,7 +25,8 @@ async function apiFetch(path: string, { notFoundAsNull = false } = {}) {
       cause: err,
     });
   }
-  if (res.status === 404 && notFoundAsNull) return null;
+  // 400 = malformed product code in the URL: also "no such product".
+  if ((res.status === 404 || res.status === 400) && notFoundAsNull) return null;
   if (!res.ok) {
     throw new Error(
       `API ${API_URL}${path} failed with ${res.status}` +
