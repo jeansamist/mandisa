@@ -17,8 +17,12 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Mandisa — Made to look like you.", template: "%s · Mandisa" },
-  description: "This premium e-commerce platform offers ready-to-wear natural-texture wigs and accessories, celebrating Black beauty with a seamless shopping experience.",
+  title: {
+    default: "Mandisa — Made to look like you.",
+    template: "%s · Mandisa",
+  },
+  description:
+    "This premium e-commerce platform offers ready-to-wear natural-texture wigs and accessories, celebrating Black beauty with a seamless shopping experience.",
   robots: { index: false, follow: false },
   icons: { icon: "/favicon.svg" },
 };

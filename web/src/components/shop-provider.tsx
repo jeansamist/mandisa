@@ -20,7 +20,11 @@ export function useShop() {
   return ctx;
 }
 
-export default function ShopProvider({ children }: { children: React.ReactNode }) {
+export default function ShopProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const [cartCount, setCartCount] = useState(0);
   const [assistantOpen, setAssistantOpen] = useState(false);
@@ -34,8 +38,23 @@ export default function ShopProvider({ children }: { children: React.ReactNode }
     toastTimer.current = window.setTimeout(() => setToast(false), 2200);
   };
 
-  return <ShopContext.Provider value={{ cartCount, setCartCount, addToCart, assistantOpen, setAssistantOpen }}>
-    {children}
-    {toast && <div className="toast"><Icon name="check" /> Ajouté au panier <button onClick={() => router.push("/cart")}>Voir</button></div>}
-  </ShopContext.Provider>;
+  return (
+    <ShopContext.Provider
+      value={{
+        cartCount,
+        setCartCount,
+        addToCart,
+        assistantOpen,
+        setAssistantOpen,
+      }}
+    >
+      {children}
+      {toast && (
+        <div className="toast">
+          <Icon name="check" /> Ajouté au panier{" "}
+          <button onClick={() => router.push("/cart")}>Voir</button>
+        </div>
+      )}
+    </ShopContext.Provider>
+  );
 }

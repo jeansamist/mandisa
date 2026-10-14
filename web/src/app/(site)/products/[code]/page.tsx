@@ -7,7 +7,9 @@ export function generateStaticParams() {
   return products.map((p) => ({ code: p.code.toLowerCase() }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/products/[code]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/products/[code]">): Promise<Metadata> {
   const product = findProduct((await params).code);
   return { title: product?.name };
 }
