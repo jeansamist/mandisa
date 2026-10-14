@@ -4,8 +4,13 @@ import { notFound } from "next/navigation";
 import { getProduct, getProducts } from "@/lib/api";
 import ProductView from "@/views/product";
 
+// Placeholder for an empty catalog: Cache Components needs at least one param.
+// It renders "not found"; real products added later are served on demand.
+const NO_PRODUCT = "_";
+
 export async function generateStaticParams() {
   const products = await getProducts();
+  if (products.length === 0) return [{ code: NO_PRODUCT }];
   return products.map((p) => ({ code: p.code.toLowerCase() }));
 }
 
