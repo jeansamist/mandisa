@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import express, { type ErrorRequestHandler, type Express } from "express";
+import cors from "cors";
 import { sql } from "drizzle-orm";
 import { pinoHttp } from "pino-http";
 import { db } from "../db/client.js";
@@ -62,6 +63,25 @@ export function createApp(app: Express = express()) {
       },
     }),
   );
+  // Any origin may call the API (no cookies are used). Protected routes still
+  // require x-internal-key; preflights are answered here, before that check.
+  app.use(
+    cors({
+      origin: "*",
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowedHeaders: [
+        "content-type",
+        "x-internal-key",
+        "x-admin-session",
+        "x-order-token",
+        "x-request-id",
+        "x-client-user-agent",
+      ],
+      exposedHeaders: ["x-request-id"],
+      maxAge: 86400,
+    }),
+  );
+
   app.get("/health", async (_req, res) => {
     await db.execute(sql`select 1`);
     res.json({ status: "ok" });

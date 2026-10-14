@@ -55,7 +55,13 @@ export const updateVariantSchema = z.object({
 });
 
 export const mediaInputSchema = z.object({
-  url: z.string().trim().url().max(1000),
+  // Any domain, but only web addresses (no javascript:, data:, file: …).
+  url: z
+    .string()
+    .trim()
+    .max(1000)
+    .url()
+    .refine((u) => /^https?:\/\//i.test(u), "http or https URL"),
   kind: z.enum(["image", "video"]).default("image"),
   approved: z.boolean().default(false),
 });

@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   // app/[locale] is the root layout, so unmatched URLs need a global 404.
   experimental: { globalNotFound: true },
+  // Product and site photos can come from any domain (URLs stored in the database).
+  // The UI uses plain <img> tags; this also covers next/image if it is used later.
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
+    ],
+  },
   turbopack: {
     rules: {
       "*.css": {
