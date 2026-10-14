@@ -15,6 +15,34 @@
       "when": 1791973144433,
       "tag": "0001_true_wrecking_crew",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791975885068,
+      "tag": "0002_breezy_spiral",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791977414800,
+      "tag": "0003_thankful_iceman",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791978943629,
+      "tag": "0004_big_iron_lad",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791980222431,
+      "tag": "0005_tidy_fat_cobra",
+      "breakpoints": true
     }
   ]
 }

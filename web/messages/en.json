@@ -86,7 +86,15 @@
       "reply": "You might love Syntiche. Would you prefer a defined or a fluffy look?",
       "viewProduct": "View this wig",
       "whatsapp": "Talk to a person on WhatsApp"
-    }
+    },
+    "send": "Send",
+    "typing": "The assistant is typing…",
+    "unavailable": "The assistant is unavailable right now. Message us on WhatsApp.",
+    "error": "Something went wrong. Please try again in a moment.",
+    "rateLimited": "Too many messages for now. Try again later or message us on WhatsApp.",
+    "handedOff": "Our team takes over on WhatsApp.",
+    "openWhatsapp": "Open WhatsApp",
+    "newConversation": "New conversation"
   },
   "ProductCard": {
     "imageAlt": "{name}, {texture} wig",
@@ -262,7 +270,11 @@
     "emptyCopy": "Your next look is waiting for you in the collection.",
     "discover": "Discover the collection",
     "title": "Your cart <sup>({count})</sup>",
-    "lineVariant": "Afro · 14\" · Natural black · Cap M",
+    "loading": "Loading your cart…",
+    "variant": "{length}\" · {color} · Cap {capSize}",
+    "preorder": "Pre-order · made in 4 to 6 weeks",
+    "unavailable": "No longer available",
+    "problemsNote": "Some items are no longer available. Remove them to continue.",
     "remove": "Remove",
     "promoPlaceholder": "Promo code",
     "apply": "Apply",
@@ -270,11 +282,12 @@
     "subtotal": "Subtotal",
     "discount": "Discount",
     "delivery": "Delivery",
-    "freeInDouala": "Free in Douala",
+    "deliveryNext": "Calculated at the next step",
     "total": "Total",
     "checkout": "Proceed to checkout",
     "continueShopping": "Continue shopping",
-    "paymentNote": "Full payment is required before confirmation, except for cash on delivery."
+    "paymentNote": "Full payment is required before confirmation, except for cash on delivery.",
+    "error": "We couldn't load your cart. Please try again in a moment."
   },
   "Checkout": {
     "metaTitle": "Checkout",
@@ -295,30 +308,35 @@
       "lastNamePlaceholder": "Your last name",
       "phone": "Phone (WhatsApp)",
       "phonePlaceholder": "+237 6•• ••• •••",
-      "email": "Email",
+      "phoneHint": "We send your order updates on WhatsApp.",
+      "email": "Email (optional)",
       "emailPlaceholder": "you@example.com",
       "next": "Continue to delivery"
     },
     "delivery": {
       "title": "Delivery method",
       "options": {
-        "douala": {
+        "douala_home": {
           "title": "Douala, home delivery",
-          "detail": "Free · target 1 h maximum [to be confirmed]"
+          "detail": "Target 1 h maximum [to be confirmed]"
         },
-        "bali": {
+        "bali_pickup": {
           "title": "Pickup in Bali",
           "detail": "Behind Somatel Hôtel, past Hôtel Premium"
         },
-        "otherCity": {
+        "other_city": {
           "title": "Other city in Cameroon",
-          "detail": "Rate shared before payment"
+          "detail": "Rate shared on WhatsApp before payment"
         },
         "international": {
           "title": "International",
-          "detail": "Fees confirmed before validation"
+          "detail": "Fees confirmed on WhatsApp before payment"
         }
       },
+      "free": "Free",
+      "onQuote": "On quote",
+      "city": "City",
+      "cityPlaceholder": "E.g. Douala",
       "district": "Neighborhood",
       "districtPlaceholder": "E.g. Bonapriso",
       "landmark": "Delivery landmark",
@@ -330,11 +348,11 @@
     "payment": {
       "title": "Payment",
       "methods": {
-        "momo": {
+        "mtn_momo": {
           "title": "MTN MoMo",
           "detail": "Approve from your phone"
         },
-        "orange": {
+        "orange_money": {
           "title": "Orange Money",
           "detail": "Approve from your phone"
         },
@@ -342,29 +360,50 @@
           "title": "Bank card",
           "detail": "Visa, Mastercard"
         },
-        "transfer": {
+        "bank_transfer": {
           "title": "Bank transfer",
           "detail": "Proof of payment required"
         },
-        "delivery": {
+        "cash_on_delivery": {
           "title": "Cash on delivery",
-          "detail": "Available in Douala"
+          "detail": "Cash or Mobile Money to the courier"
         }
       },
-      "reference": "Transaction reference",
+      "paymentPhone": "Mobile Money number to charge",
+      "paymentPhoneHint": "You will receive a payment request on this number.",
+      "reference": "Transaction reference (if already paid)",
       "referencePlaceholder": "Reference",
+      "noMethods": "No payment method is available right now. Message us on WhatsApp.",
+      "quoteNote": "Delivery fees to your city are calculated by our team. Send your order: we share the rate on WhatsApp, then you pay.",
       "acceptTerms": "I accept the terms of sale",
       "marketingOptIn": "I would like to receive offers by WhatsApp / email",
       "note": "Your order is confirmed once payment is received.",
-      "confirm": "Confirm and pay"
+      "confirm": "Confirm and pay",
+      "sendQuote": "Send my order",
+      "placing": "Sending…"
     },
     "summary": {
       "title": "Your order",
-      "variant": "14\" · Black · M",
       "subtotal": "Subtotal",
       "delivery": "Delivery",
       "free": "Free",
+      "onQuote": "On quote",
+      "toChoose": "To be chosen",
       "total": "Total"
+    },
+    "errors": {
+      "required": "Please fill in the required fields.",
+      "invalid_phone": "This phone number is not valid.",
+      "invalid_payment_phone": "Mobile Money requires a Cameroonian number (6•• ••• •••).",
+      "address_required": "Please enter your address or neighborhood.",
+      "cart_unavailable": "An item in your cart is no longer available. Go back to your cart.",
+      "payment_method_unavailable": "This payment method is no longer available. Please choose another one.",
+      "invalid_delivery_method": "This delivery method is no longer available.",
+      "terms": "Please accept the terms of sale.",
+      "choose_delivery": "Choose a delivery method.",
+      "choose_payment": "Choose a payment method.",
+      "network": "Connection failed. Check your network and try again.",
+      "generic": "Something went wrong. Please try again in a moment."
     }
   },
   "Orders": {
@@ -377,14 +416,79 @@
     }
   },
   "Confirmation": {
-    "metaTitle": "Order confirmed",
-    "eyebrow": "Order confirmed",
+    "metaTitle": "Order confirmation",
+    "loading": "Loading your order…",
+    "notFound": {
+      "title": "Order not found",
+      "copy": "This order link is not valid. Please check the message you received on WhatsApp."
+    },
     "title": "Thank you, {name}!",
-    "body": "Your order no. <b>{orderNumber}</b> has been placed. We are sending you a confirmation by WhatsApp and email.",
-    "variant": "Afro · 14\" · Cap M",
+    "orderNumber": "Order no. <b>{orderNumber}</b>",
+    "states": {
+      "awaitingPayment": {
+        "eyebrow": "Payment pending",
+        "title": "Approve the payment on your phone",
+        "copy": "A payment request of {total} was sent to the number ending in {hint}. Confirm it with your PIN. This page updates automatically."
+      },
+      "paymentFailed": {
+        "eyebrow": "Payment not completed",
+        "title": "The payment did not go through",
+        "retry": "Try the payment again",
+        "phone": "Mobile Money number",
+        "retrying": "Sending the request…"
+      },
+      "paid": {
+        "eyebrow": "Order confirmed",
+        "title": "Payment received, thank you!",
+        "copy": "We are preparing your order. You'll receive the confirmation and tracking on WhatsApp."
+      },
+      "review": {
+        "eyebrow": "Order placed",
+        "title": "We are checking your payment",
+        "copy": "Our team is confirming your transfer and will message you on WhatsApp."
+      },
+      "transfer": {
+        "eyebrow": "Order placed",
+        "title": "Waiting for your transfer",
+        "copy": "We'll send you our bank details on WhatsApp. Your order is confirmed once payment is received."
+      },
+      "cashOnDelivery": {
+        "eyebrow": "Order placed",
+        "title": "You'll pay on delivery",
+        "copy": "We'll contact you on WhatsApp to arrange delivery."
+      },
+      "quote": {
+        "eyebrow": "Request sent",
+        "title": "We are calculating your delivery",
+        "copy": "You'll receive the delivery rate on WhatsApp, followed by the payment link."
+      },
+      "cancelled": {
+        "eyebrow": "Order cancelled",
+        "title": "This order was cancelled",
+        "copy": "The payment deadline has passed. Message us on WhatsApp if needed."
+      }
+    },
+    "failures": {
+      "9201": "You declined the payment request.",
+      "9202": "Your Mobile Money balance is insufficient.",
+      "9203": "The payment request expired before you confirmed it.",
+      "initiation_failed": "The payment request could not be sent.",
+      "default": "The payment was declined. You can try again."
+    },
+    "retryErrors": {
+      "payment_in_progress": "A payment is already in progress. Please wait a moment.",
+      "too_many_attempts": "Too many attempts. Please message us on WhatsApp.",
+      "cart_unavailable": "An item is no longer available. Please message us on WhatsApp.",
+      "invalid_payment_phone": "Mobile Money requires a Cameroonian number.",
+      "default": "We can't retry the payment right now."
+    },
+    "items": "Items",
     "delivery": "Delivery",
-    "deliveryValue": "Douala, home delivery",
     "payment": "Payment",
+    "subtotal": "Subtotal",
+    "deliveryFee": "Delivery fee",
+    "onQuote": "On quote",
+    "free": "Free",
     "total": "Total",
     "track": "Track my order",
     "backToShop": "Back to the shop"
@@ -568,7 +672,12 @@
       "phone": "Phone",
       "message": "Message",
       "messagePlaceholder": "How can we help you?",
-      "submit": "Send message"
+      "submit": "Send message",
+      "sending": "Sending…",
+      "sent": "Thank you! We'll get back to you quickly on WhatsApp.",
+      "error": "Your message couldn't be sent. Please try again or message us on WhatsApp.",
+      "invalidPhone": "This phone number is not valid.",
+      "required": "Please fill in all the fields."
     }
   },
   "Legal": {

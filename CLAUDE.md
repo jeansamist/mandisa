@@ -65,7 +65,7 @@ Clientes ─► WhatsApp (Cloud API) ─┐   │
 ### Principes non négociables
 
 1. **Une seule source de vérité** pour le stock, les commandes et les clients, partagée par le site, WhatsApp et l'IA.
-2. **Le webhook de paiement signé est la seule preuve de paiement automatique.** Jamais de passage à « payée » sur simple déclaration du client ou du frontend.
+2. **Preuve de paiement automatique : uniquement l'agrégateur**, soit par webhook signé, soit par vérification serveur à serveur (`GET /payments/{id}` avec la clé API, montant et devise contrôlés). Jamais de passage à « payée » sur simple déclaration du client ou du frontend.
 3. **L'IA n'écrit jamais directement en base.** Elle passe par des outils (tools) à périmètre limité (voir section 7).
 4. **Séparation des données financières** : marges, chiffre d'affaires, statistiques restent dans l'admin privé, inaccessibles à l'IA et à toute route publique.
 5. **Idempotence** : tous les webhooks et créations de commande doivent être idempotents (clé d'idempotence, déduplication des événements).
@@ -231,6 +231,14 @@ pnpm format
 ```
 
 - Textes UI : `web/messages/fr.json` et `en.json`.
+- Tests de l'API : `pnpm test` (base `mandisa_test` créée automatiquement, Docker requis). Couvrent stock, machine à états, webhooks, checkout.
+- Checkout : le backend décide des frais de livraison (table `delivery_methods`) et des moyens de paiement (`payment_methods` + règles dans `api/src/services/checkout-options.ts`). Chaque étape est tracée dans `checkout_sessions` / `checkout_events`.
+- ElgioPay : `ELGIOPAY_API_KEY` et `ELGIOPAY_WEBHOOK_SECRET` dans `api/.env` (Mobile Money masqué sans clé). Webhook : `POST /webhooks/elgiopay`, à exposer en dev via un tunnel HTTPS (ex. `cloudflared tunnel --url http://localhost:4000`). Sans webhook, l'API vérifie elle-même le statut des paiements en attente (job toutes les 10 s + à chaque rafraîchissement de la page de confirmation).
+- WhatsApp : outbox `notifications` envoyée par un worker ; fournisseur à brancher dans `api/src/services/notifications.ts` (`NOTIFICATIONS_PROVIDER=log` en attendant).
+- Parcours utilisateur : traceur vanilla JS `web/public/mt.js` (pages vues, clics, temps et profondeur de scroll) → `/api/track` (Next) → `POST /analytics/events` (API) → tables `analytics_sessions` / `analytics_events`. `checkout_sessions.visitor_id` relie le parcours à la commande. Événements métier via `trackEvent()` (`web/src/lib/tracker.ts`). Jamais de valeurs saisies ni de query string ; `data-track-ignore` pour exclure une zone.
+- Back-office `/ms` (Next, hors i18n, français) : connexion email + mot de passe (un seul compte admin, créé par `pnpm admin:create <email> "<nom>"` dans `api/`, mot de passe généré affiché une fois). Session : cookie httpOnly `ms_session` (path `/ms`), jeton haché en base, verrouillage après 5 échecs / 15 min, `audit_log` pour toute action sensible. Endpoints `/admin/*` de l'API.
+- Assistant IA du site : Claude API (`@anthropic-ai/sdk`), `ANTHROPIC_API_KEY` dans `api/.env` (vide = assistant masqué). Modèle/effort/consignes/base de connaissances/outils réglables dans `/ms/assistant` (table `ai_config`). Outils en lecture seule + `handoff_to_human` ; chaque appel d'outil dans `ai_actions` ; historique append-only dans `ai_messages` (rejoué tel quel). Repli serveur sur refus (`fallbacks: "default"`) sauf Haiku.
+- `INTERNAL_API_KEY` identique dans `api/.env` et `web/.env.local` : seul le serveur web appelle l'API.
 - Logs de l'API : pino (`api/src/logger.ts`). `LOG_LEVEL=debug` en dev (inclut chaque requête SQL), `info` en prod (JSON). Chaque requête a un `x-request-id`. Ne jamais logger de secrets ni de paramètres SQL (données personnelles).
 - Le web lit l'API uniquement côté serveur (`web/src/lib/api.ts`, cache `minutes`) ; le navigateur ne l'appelle jamais.
 - Toutes les images (produits et site) sont des URL stockées en base (`product_media`, `site_images`).

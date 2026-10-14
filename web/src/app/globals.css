@@ -2149,3 +2149,186 @@ footer {
     white-space: nowrap;
   }
 }
+
+/* Checkout feedback */
+.form-error {
+  margin: 12px 0;
+  color: var(--error);
+  font-size: 14px;
+}
+.notice {
+  margin-bottom: 28px;
+  padding: 22px;
+  border-radius: 14px;
+  background: var(--sand);
+  display: grid;
+  gap: 12px;
+  text-align: left;
+}
+.notice h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+.notice p {
+  margin: 0;
+}
+.notice label {
+  display: grid;
+  gap: 6px;
+}
+
+/* Order confirmation: roomier spacing and readable line heights */
+.confirmation > .eyebrow {
+  margin-bottom: 16px;
+}
+.confirmation h1 {
+  margin-bottom: 18px;
+  line-height: 1.05;
+}
+.confirmation > p {
+  margin-bottom: 48px;
+  line-height: 1.7;
+}
+.confirmation-card {
+  padding: 40px;
+  display: grid;
+  gap: 28px;
+}
+.confirmation-card .notice,
+.confirmation-card .order-product {
+  margin: 0;
+}
+.confirmation-card .order-product div {
+  gap: 4px;
+}
+.confirmation-card .order-product small {
+  line-height: 1.5;
+}
+.notice {
+  padding: 28px;
+  gap: 16px;
+  line-height: 1.65;
+}
+.notice h2 {
+  line-height: 1.1;
+}
+.notice label {
+  gap: 8px;
+}
+.notice .button {
+  justify-self: start;
+}
+.receipt {
+  padding-top: 24px;
+  display: grid;
+  gap: 14px;
+}
+.receipt p {
+  margin: 0;
+  gap: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.confirmation > .button-row {
+  margin-top: 40px;
+  gap: 14px;
+}
+@media (max-width: 600px) {
+  .confirmation-card {
+    padding: 24px 18px;
+    gap: 22px;
+  }
+  .notice {
+    padding: 20px;
+  }
+  .confirmation > p {
+    margin-bottom: 32px;
+  }
+}
+
+/* Care banner (home): even spacing between eyebrow, title, text and button */
+.care-banner div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.care-banner .eyebrow,
+.care-banner h2 {
+  margin: 0;
+}
+.care-banner h2 {
+  line-height: 1.05;
+}
+.care-banner p {
+  margin: 0 0 12px;
+  max-width: 440px;
+  line-height: 1.7;
+  font-size: 17px;
+}
+@media (max-width: 600px) {
+  .care-banner div {
+    gap: 16px;
+  }
+}
+
+/* Site assistant: real input, typing indicator, errors and WhatsApp hand-off */
+.chat-input {
+  gap: 10px;
+  color: var(--ink);
+}
+.chat-input:focus-within {
+  border-color: var(--green);
+}
+.chat-input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+}
+.chat-input input:focus-visible {
+  outline: none;
+}
+.chat-input button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--green);
+  display: grid;
+  place-items: center;
+}
+.chat-input button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.bubble--typing {
+  color: rgba(35, 42, 32, 0.6);
+  font-style: italic;
+}
+.chat-error {
+  margin: 0 18px 12px;
+  color: var(--error);
+  font-size: 12px;
+}
+.chat-cta {
+  margin: 0 18px 12px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--green);
+  color: var(--cream);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.assistant-panel .bubble {
+  white-space: pre-line;
+}
+@media (max-width: 600px) {
+  /* 16px avoids the iOS zoom on focus. */
+  .chat-input input {
+    font-size: 16px;
+  }
+}

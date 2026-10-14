@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useCatalog } from "@/components/site-data-provider";
 import { useFormatPrice } from "@/lib/format";
-import { Button, Icon } from "@/components/ui";
+import { Button } from "@/components/ui";
 
 // Mock order data until orders come from the backend.
 const ORDER_NUMBER = "MDS-2026-0001";
@@ -16,68 +16,6 @@ const orderStatuses = [
   "shipped",
   "delivered",
 ] as const;
-
-export function ConfirmationView() {
-  const t = useTranslations("Confirmation");
-  const tOrders = useTranslations("Orders");
-  const formatPrice = useFormatPrice();
-  const router = useRouter();
-  const item = useCatalog().find("MDS-W01");
-  if (!item) return null;
-  return (
-    <main className="page container confirmation">
-      <div className="success-mark">
-        <Icon name="check" />
-      </div>
-      <span className="eyebrow">{t("eyebrow")}</span>
-      <h1>{t("title", { name: CUSTOMER_NAME })}</h1>
-      <p>
-        {t.rich("body", {
-          orderNumber: ORDER_NUMBER,
-          b: (chunks) => <b>{chunks}</b>,
-        })}
-      </p>
-      <section className="confirmation-card">
-        <div className="order-product">
-          <img src={item.image ?? ""} alt={item.name} />
-          <div>
-            <b>{item.name}</b>
-            <small>{t("variant")}</small>
-          </div>
-          <strong>{formatPrice(item.priceXaf)}</strong>
-        </div>
-        <div className="timeline">
-          {orderStatuses.map((key, i) => (
-            <div className={i === 0 ? "active" : ""} key={key}>
-              <i>{i === 0 ? "✓" : i + 1}</i>
-              <span>{tOrders(`statuses.${key}`)}</span>
-            </div>
-          ))}
-        </div>
-        <div className="receipt">
-          <p>
-            <span>{t("delivery")}</span>
-            <b>{t("deliveryValue")}</b>
-          </p>
-          <p>
-            <span>{t("payment")}</span>
-            <b>MTN MoMo</b>
-          </p>
-          <p>
-            <span>{t("total")}</span>
-            <b>{formatPrice(item.priceXaf)}</b>
-          </p>
-        </div>
-      </section>
-      <div className="button-row">
-        <Button onClick={() => router.push("/tracking")}>{t("track")}</Button>
-        <Button variant="outline" onClick={() => router.push("/shop")}>
-          {t("backToShop")}
-        </Button>
-      </div>
-    </main>
-  );
-}
 
 export function TrackingView() {
   const t = useTranslations("Tracking");

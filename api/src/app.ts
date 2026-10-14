@@ -4,7 +4,16 @@ import { sql } from "drizzle-orm";
 import { pinoHttp } from "pino-http";
 import { db } from "./db/client.js";
 import { loggableError, logger } from "./logger.js";
+import { ZodError } from "zod";
+import { requireInternalKey } from "./http/internal-key.js";
+import { adminRouter } from "./routes/admin.js";
+import { analyticsRouter } from "./routes/analytics.js";
+import { publicRouter } from "./routes/public.js";
+import { checkoutRouter } from "./routes/checkout.js";
+import { ordersRouter } from "./routes/orders.js";
 import { productsRouter } from "./routes/products.js";
+import { webhooksRouter } from "./routes/webhooks.js";
+import { CheckoutError } from "./services/errors.js";
 import { listSiteImages } from "./services/site-images.js";
 
 // Inside routers `req.url` is relative to the mount point; Express keeps the original.
@@ -51,14 +60,23 @@ export function createApp() {
       },
     }),
   );
-  app.use(express.json());
-
   app.get("/health", async (_req, res) => {
     await db.execute(sql`select 1`);
     res.json({ status: "ok" });
   });
 
+  // Called by ElgioPay (signed), before the JSON parser: it needs the raw body.
+  app.use("/webhooks", webhooksRouter);
+
+  app.use(express.json({ limit: "100kb" }));
+  app.use(requireInternalKey);
+
   app.use("/products", productsRouter);
+  app.use("/checkout", checkoutRouter);
+  app.use("/orders", ordersRouter);
+  app.use("/analytics", analyticsRouter);
+  app.use("/admin", adminRouter);
+  app.use(publicRouter);
 
   app.get("/site-images", async (req, res) => {
     const images = await listSiteImages();
@@ -72,6 +90,22 @@ export function createApp() {
   });
 
   const onError: ErrorRequestHandler = (err, req, res, _next) => {
+    if (err instanceof CheckoutError) {
+      req.log.info({ code: err.code, details: err.details }, "request refused");
+      res
+        .status(err.httpStatus)
+        .json({ error: err.code, details: err.details });
+      return;
+    }
+    if (err instanceof ZodError) {
+      req.log.info({ issues: err.issues }, "invalid request");
+      res.status(400).json({ error: "invalid_request", details: err.issues });
+      return;
+    }
+    if (err instanceof SyntaxError && "body" in err) {
+      res.status(400).json({ error: "invalid_json" });
+      return;
+    }
     // pino-http logs it once, on the request summary line.
     res.err = loggableError(err) as Error;
     res.status(500).json({ error: "internal_error" });

@@ -86,7 +86,15 @@
       "reply": "Syntiche pourrait beaucoup vous plaire. Souhaitez-vous un rendu plutôt défini ou aérien ?",
       "viewProduct": "Voir le modèle",
       "whatsapp": "Parler à une personne sur WhatsApp"
-    }
+    },
+    "send": "Envoyer",
+    "typing": "L'assistante écrit…",
+    "unavailable": "L'assistante est indisponible pour le moment. Écrivez-nous sur WhatsApp.",
+    "error": "Une erreur est survenue. Réessayez dans un instant.",
+    "rateLimited": "Trop de messages pour le moment. Réessayez plus tard ou écrivez-nous sur WhatsApp.",
+    "handedOff": "Notre équipe prend le relais sur WhatsApp.",
+    "openWhatsapp": "Ouvrir WhatsApp",
+    "newConversation": "Nouvelle conversation"
   },
   "ProductCard": {
     "imageAlt": "{name}, perruque {texture}",
@@ -262,7 +270,11 @@
     "emptyCopy": "Votre prochaine allure vous attend dans la collection.",
     "discover": "Découvrir la collection",
     "title": "Votre panier <sup>({count})</sup>",
-    "lineVariant": "Afro · 14\" · Noir naturel · Bonnet M",
+    "loading": "Chargement de votre panier…",
+    "variant": "{length}\" · {color} · Bonnet {capSize}",
+    "preorder": "Précommande · fabrication 4 à 6 semaines",
+    "unavailable": "Plus disponible",
+    "problemsNote": "Certains articles ne sont plus disponibles. Retirez-les pour continuer.",
     "remove": "Supprimer",
     "promoPlaceholder": "Code promo",
     "apply": "Appliquer",
@@ -270,11 +282,12 @@
     "subtotal": "Sous-total",
     "discount": "Réduction",
     "delivery": "Livraison",
-    "freeInDouala": "Gratuite à Douala",
+    "deliveryNext": "Calculée à l'étape suivante",
     "total": "Total",
     "checkout": "Passer à la commande",
     "continueShopping": "Continuer mes achats",
-    "paymentNote": "Paiement intégral avant validation, sauf paiement à la livraison."
+    "paymentNote": "Paiement intégral avant validation, sauf paiement à la livraison.",
+    "error": "Impossible de charger le panier. Réessayez dans un instant."
   },
   "Checkout": {
     "metaTitle": "Commande",
@@ -295,30 +308,35 @@
       "lastNamePlaceholder": "Votre nom",
       "phone": "Téléphone (WhatsApp)",
       "phonePlaceholder": "+237 6•• ••• •••",
-      "email": "Email",
+      "phoneHint": "Nous vous envoyons le suivi de commande sur WhatsApp.",
+      "email": "Email (facultatif)",
       "emailPlaceholder": "vous@exemple.com",
       "next": "Continuer vers la livraison"
     },
     "delivery": {
       "title": "Mode de livraison",
       "options": {
-        "douala": {
+        "douala_home": {
           "title": "Douala, à domicile",
-          "detail": "Gratuite · objectif 1 h maximum [à confirmer]"
+          "detail": "Objectif 1 h maximum [à confirmer]"
         },
-        "bali": {
+        "bali_pickup": {
           "title": "Retrait à Bali",
           "detail": "Derrière Somatel Hôtel, après Hôtel Premium"
         },
-        "otherCity": {
+        "other_city": {
           "title": "Autre ville du Cameroun",
-          "detail": "Tarif communiqué avant le paiement"
+          "detail": "Tarif communiqué sur WhatsApp avant le paiement"
         },
         "international": {
           "title": "International",
-          "detail": "Frais confirmés avant validation"
+          "detail": "Frais confirmés sur WhatsApp avant le paiement"
         }
       },
+      "free": "Gratuite",
+      "onQuote": "Sur devis",
+      "city": "Ville",
+      "cityPlaceholder": "Ex. Douala",
       "district": "Quartier",
       "districtPlaceholder": "Ex. Bonapriso",
       "landmark": "Repère de livraison",
@@ -330,11 +348,11 @@
     "payment": {
       "title": "Paiement",
       "methods": {
-        "momo": {
+        "mtn_momo": {
           "title": "MTN MoMo",
           "detail": "Validation depuis votre téléphone"
         },
-        "orange": {
+        "orange_money": {
           "title": "Orange Money",
           "detail": "Validation depuis votre téléphone"
         },
@@ -342,29 +360,50 @@
           "title": "Carte bancaire",
           "detail": "Visa, Mastercard"
         },
-        "transfer": {
+        "bank_transfer": {
           "title": "Virement bancaire",
           "detail": "Preuve de paiement requise"
         },
-        "delivery": {
+        "cash_on_delivery": {
           "title": "Paiement à la livraison",
-          "detail": "Disponible à Douala"
+          "detail": "En espèces ou Mobile Money au livreur"
         }
       },
-      "reference": "Référence de transaction",
+      "paymentPhone": "Numéro Mobile Money à débiter",
+      "paymentPhoneHint": "Vous recevrez une demande de paiement sur ce numéro.",
+      "reference": "Référence de transaction (si déjà effectué)",
       "referencePlaceholder": "Référence",
+      "noMethods": "Aucun moyen de paiement n'est disponible pour le moment. Écrivez-nous sur WhatsApp.",
+      "quoteNote": "Les frais de livraison vers votre ville sont calculés par notre équipe. Envoyez votre commande : nous vous communiquons le tarif sur WhatsApp, puis vous payez.",
       "acceptTerms": "J'accepte les conditions de vente",
       "marketingOptIn": "Je souhaite recevoir des offres par WhatsApp / email",
       "note": "Votre commande est validée après réception du paiement.",
-      "confirm": "Confirmer et payer"
+      "confirm": "Confirmer et payer",
+      "sendQuote": "Envoyer ma commande",
+      "placing": "Envoi en cours…"
     },
     "summary": {
       "title": "Votre commande",
-      "variant": "14\" · Noir · M",
       "subtotal": "Sous-total",
       "delivery": "Livraison",
       "free": "Gratuite",
+      "onQuote": "Sur devis",
+      "toChoose": "À choisir",
       "total": "Total"
+    },
+    "errors": {
+      "required": "Merci de remplir les champs obligatoires.",
+      "invalid_phone": "Ce numéro de téléphone n'est pas valide.",
+      "invalid_payment_phone": "Le paiement Mobile Money nécessite un numéro camerounais (6•• ••• •••).",
+      "address_required": "Merci d'indiquer votre adresse ou votre quartier.",
+      "cart_unavailable": "Un article de votre panier n'est plus disponible. Revenez au panier.",
+      "payment_method_unavailable": "Ce moyen de paiement n'est plus disponible. Choisissez-en un autre.",
+      "invalid_delivery_method": "Ce mode de livraison n'est plus disponible.",
+      "terms": "Merci d'accepter les conditions de vente.",
+      "choose_delivery": "Choisissez un mode de livraison.",
+      "choose_payment": "Choisissez un moyen de paiement.",
+      "network": "Connexion impossible. Vérifiez votre réseau et réessayez.",
+      "generic": "Une erreur est survenue. Réessayez dans un instant."
     }
   },
   "Orders": {
@@ -378,13 +417,78 @@
   },
   "Confirmation": {
     "metaTitle": "Commande confirmée",
-    "eyebrow": "Commande confirmée",
+    "loading": "Chargement de votre commande…",
+    "notFound": {
+      "title": "Commande introuvable",
+      "copy": "Ce lien de commande n'est pas valide. Vérifiez le message reçu sur WhatsApp."
+    },
     "title": "Merci, {name} !",
-    "body": "Votre commande n° <b>{orderNumber}</b> est enregistrée. Nous vous envoyons une confirmation par WhatsApp et par email.",
-    "variant": "Afro · 14\" · Bonnet M",
+    "orderNumber": "Commande n° <b>{orderNumber}</b>",
+    "states": {
+      "awaitingPayment": {
+        "eyebrow": "Paiement en attente",
+        "title": "Validez le paiement sur votre téléphone",
+        "copy": "Une demande de paiement de {total} a été envoyée au numéro se terminant par {hint}. Confirmez-la avec votre code secret. Cette page se met à jour automatiquement."
+      },
+      "paymentFailed": {
+        "eyebrow": "Paiement non abouti",
+        "title": "Le paiement n'a pas abouti",
+        "retry": "Relancer le paiement",
+        "phone": "Numéro Mobile Money",
+        "retrying": "Envoi de la demande…"
+      },
+      "paid": {
+        "eyebrow": "Commande confirmée",
+        "title": "Paiement reçu, merci !",
+        "copy": "Nous préparons votre commande. Vous recevez la confirmation et le suivi sur WhatsApp."
+      },
+      "review": {
+        "eyebrow": "Commande enregistrée",
+        "title": "Nous vérifions votre paiement",
+        "copy": "Notre équipe confirme votre virement et vous écrit sur WhatsApp."
+      },
+      "transfer": {
+        "eyebrow": "Commande enregistrée",
+        "title": "En attente de votre virement",
+        "copy": "Nous vous envoyons les coordonnées bancaires sur WhatsApp. Votre commande est validée à réception du paiement."
+      },
+      "cashOnDelivery": {
+        "eyebrow": "Commande enregistrée",
+        "title": "Vous paierez à la livraison",
+        "copy": "Nous vous contactons sur WhatsApp pour organiser la livraison."
+      },
+      "quote": {
+        "eyebrow": "Demande envoyée",
+        "title": "Nous calculons votre livraison",
+        "copy": "Vous recevez le tarif de livraison sur WhatsApp, puis le lien de paiement."
+      },
+      "cancelled": {
+        "eyebrow": "Commande annulée",
+        "title": "Cette commande a été annulée",
+        "copy": "Le délai de paiement est dépassé. Écrivez-nous sur WhatsApp si besoin."
+      }
+    },
+    "failures": {
+      "9201": "Vous avez refusé la demande de paiement.",
+      "9202": "Le solde de votre compte Mobile Money est insuffisant.",
+      "9203": "La demande de paiement a expiré avant confirmation.",
+      "initiation_failed": "La demande de paiement n'a pas pu être envoyée.",
+      "default": "Le paiement a été refusé. Vous pouvez réessayer."
+    },
+    "retryErrors": {
+      "payment_in_progress": "Un paiement est déjà en cours. Patientez un instant.",
+      "too_many_attempts": "Trop de tentatives. Écrivez-nous sur WhatsApp.",
+      "cart_unavailable": "Un article n'est plus disponible. Écrivez-nous sur WhatsApp.",
+      "invalid_payment_phone": "Le paiement Mobile Money nécessite un numéro camerounais.",
+      "default": "Impossible de relancer le paiement pour le moment."
+    },
+    "items": "Articles",
     "delivery": "Livraison",
-    "deliveryValue": "Douala, à domicile",
     "payment": "Paiement",
+    "subtotal": "Sous-total",
+    "deliveryFee": "Frais de livraison",
+    "onQuote": "Sur devis",
+    "free": "Gratuite",
     "total": "Total",
     "track": "Suivre ma commande",
     "backToShop": "Retour à la boutique"
@@ -568,7 +672,12 @@
       "phone": "Téléphone",
       "message": "Message",
       "messagePlaceholder": "Comment pouvons-nous vous aider ?",
-      "submit": "Envoyer le message"
+      "submit": "Envoyer le message",
+      "sending": "Envoi…",
+      "sent": "Merci ! Nous vous répondons rapidement sur WhatsApp.",
+      "error": "Le message n'a pas pu être envoyé. Réessayez ou écrivez-nous sur WhatsApp.",
+      "invalidPhone": "Ce numéro de téléphone n'est pas valide.",
+      "required": "Merci de remplir tous les champs."
     }
   },
   "Legal": {

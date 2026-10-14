@@ -21,6 +21,8 @@ export type ProductSummary = {
   /** Remaining units when `status` is "lowStock", otherwise null. */
   lowStockQuantity: number | null;
   image: string | null;
+  /** Variant added by "Add to cart" on product cards; null if nothing can be ordered. */
+  defaultSku: string | null;
 };
 
 export type ProductDetail = ProductSummary & {
@@ -58,6 +60,24 @@ function lowStockQuantity(status: StockStatus, stock: StockInput[]) {
   return stock.reduce((sum, v) => sum + availableQuantity(v), 0);
 }
 
+/** Prefers 14" / M in stock, then anything in stock, then a pre-order. */
+function defaultVariant(row: ProductRow) {
+  const sorted = row.variants.toSorted((a, b) => a.priceXaf - b.priceXaf);
+  const usual = (v: (typeof sorted)[number]) =>
+    v.lengthInches === 14 && v.capSize === "M";
+  const inStock = sorted.filter((v) => availableQuantity(v) > 0);
+  const preorder = sorted.filter(
+    (v) => availableQuantity(v) === 0 && v.preorderEnabled,
+  );
+  return (
+    inStock.find(usual) ??
+    inStock[0] ??
+    preorder.find(usual) ??
+    preorder[0] ??
+    null
+  );
+}
+
 function toSummary(row: ProductRow): ProductSummary {
   const status = productStatus(row.variants);
   return {
@@ -68,6 +88,7 @@ function toSummary(row: ProductRow): ProductSummary {
     status,
     lowStockQuantity: lowStockQuantity(status, row.variants),
     image: row.media.find((m) => m.kind === "image")?.url ?? null,
+    defaultSku: defaultVariant(row)?.sku ?? null,
   };
 }
 

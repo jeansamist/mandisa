@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button, Icon } from "@/components/ui";
 import { useShop } from "@/components/shop-provider";
 import { useSiteImage } from "@/components/site-data-provider";
 import { AnimatePresence } from "motion/react";
 import { Collapse, Reveal, stagger } from "@/components/motion";
+import { sendContactMessage } from "@/lib/contact-actions";
+import { visitorId } from "@/lib/tracker";
 
 export type InfoPage = "care" | "delivery" | "about";
 
@@ -113,8 +115,35 @@ export function FaqView() {
   );
 }
 
+const emptyContact = { name: "", phone: "", message: "" };
+
 export function ContactView() {
   const t = useTranslations("Contact");
+  const locale = useLocale();
+  const [form, setForm] = useState(emptyContact);
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "sent" | "required" | "invalidPhone" | "error"
+  >("idle");
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.phone.trim() || !form.message.trim()) {
+      return setStatus("required");
+    }
+    setStatus("sending");
+    const result = await sendContactMessage({
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      message: form.message.trim(),
+      locale,
+      visitorId: visitorId(),
+    }).catch(() => ({ ok: false as const, error: "network" }));
+    if (result.ok) {
+      setForm(emptyContact);
+      return setStatus("sent");
+    }
+    setStatus(result.error === "invalid_phone" ? "invalidPhone" : "error");
+  };
   const channels = [
     [t("channels.whatsapp"), "+237 650 911 804"],
     [t("channels.email"), t("emailPending")],
@@ -154,20 +183,49 @@ export function ContactView() {
             DOUALA <i>Bali</i>
           </div>
         </div>
-        <form>
+        <form onSubmit={submit}>
           <label>
             {t("form.name")}
-            <input placeholder={t("form.namePlaceholder")} />
+            <input
+              autoComplete="name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder={t("form.namePlaceholder")}
+            />
           </label>
           <label>
             {t("form.phone")}
-            <input placeholder="+237" />
+            <input
+              type="tel"
+              autoComplete="tel"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="+237"
+            />
           </label>
           <label>
             {t("form.message")}
-            <textarea placeholder={t("form.messagePlaceholder")} />
+            <textarea
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              placeholder={t("form.messagePlaceholder")}
+            />
           </label>
-          <Button>{t("form.submit")}</Button>
+          {status === "sent" && (
+            <p className="payment-note" role="status">
+              {t("form.sent")}
+            </p>
+          )}
+          {(status === "required" ||
+            status === "invalidPhone" ||
+            status === "error") && (
+            <p className="form-error" role="alert">
+              {t(`form.${status}`)}
+            </p>
+          )}
+          <Button disabled={status === "sending"}>
+            {status === "sending" ? t("form.sending") : t("form.submit")}
+          </Button>
         </form>
       </Reveal>
     </main>

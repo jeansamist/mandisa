@@ -7,16 +7,18 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "NODE_ENV=production node dist/index.js",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "admin:create": "tsx src/scripts/admin-create.ts"
   },
   "packageManager": "pnpm@12.8.1",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
     "drizzle-orm": "^0.45.4",
     "express": "^5.3.0",
     "pg": "^8.23.1",

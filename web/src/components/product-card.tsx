@@ -61,12 +61,15 @@ export default function ProductCard({
           <sup>*</sup>
         </strong>
       </div>
-      {product.status === "soldOut" ? (
+      {product.status === "soldOut" || !product.defaultSku ? (
         <Button variant="outline" disabled>
           {t("notifyMe")}
         </Button>
       ) : (
-        <Button variant="text" onClick={addToCart}>
+        <Button
+          variant="text"
+          onClick={() => product.defaultSku && addToCart(product.defaultSku)}
+        >
           {tCommon("addToCart")} <Icon name="arrow" />
         </Button>
       )}

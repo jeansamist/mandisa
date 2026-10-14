@@ -2,10 +2,18 @@ import { cacheLife, cacheTag } from "next/cache";
 import type { Product, ProductDetail } from "@/lib/catalog";
 
 // Server-only: the browser never calls the API directly.
-const API_URL = process.env.API_URL ?? "http://localhost:4000";
+export const API_URL = process.env.API_URL ?? "http://localhost:4000";
+
+/** Headers proving the request comes from this web server. */
+export function apiHeaders(extra: Record<string, string> = {}) {
+  return {
+    "x-internal-key": process.env.INTERNAL_API_KEY ?? "",
+    ...extra,
+  };
+}
 
 async function apiFetch(path: string) {
-  const res = await fetch(`${API_URL}${path}`);
+  const res = await fetch(`${API_URL}${path}`, { headers: apiHeaders() });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`API ${path} failed with ${res.status}`);
   return res.json() as Promise<unknown>;

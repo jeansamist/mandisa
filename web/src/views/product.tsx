@@ -155,12 +155,15 @@ export default function ProductView({ product }: { product: ProductDetail }) {
               <span>{qty}</span>
               <button
                 aria-label={tCommon("increaseQuantity")}
-                onClick={() => setQty(qty + 1)}
+                onClick={() => setQty(Math.min(10, qty + 1))}
               >
                 <Icon name="plus" />
               </button>
             </div>
-            <Button onClick={addToCart} disabled={status.status === "soldOut"}>
+            <Button
+              onClick={() => variant && addToCart(variant.sku, qty)}
+              disabled={!variant || status.status === "soldOut"}
+            >
               {tCommon("addToCart")} <Icon name="bag" />
             </Button>
           </div>

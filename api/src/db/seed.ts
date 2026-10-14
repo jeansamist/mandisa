@@ -3,7 +3,14 @@
 import { eq } from "drizzle-orm";
 import { loggableError, logger } from "../logger.js";
 import { db, pool } from "./client.js";
-import { productMedia, products, siteImages, variants } from "./schema.js";
+import {
+  deliveryMethods,
+  paymentMethods,
+  productMedia,
+  products,
+  siteImages,
+  variants,
+} from "./schema.js";
 
 type Texture = (typeof products.$inferInsert)["texture"];
 type Scenario = "inStock" | "lowStock" | "preorder" | "soldOut";
@@ -33,6 +40,47 @@ const siteImageUrls: Record<string, string> = {
   "info.delivery": photos.detail,
   "info.about": photos.hero,
 };
+
+// Shipping options and fees (XAF). null = quoted by the founder before payment.
+const deliveryMethodRows = [
+  {
+    code: "douala_home",
+    feeXaf: 0,
+    allowsCashOnDelivery: true,
+    requiresAddress: true,
+    position: 0,
+  },
+  {
+    code: "bali_pickup",
+    feeXaf: 0,
+    allowsCashOnDelivery: false,
+    requiresAddress: false,
+    position: 1,
+  },
+  {
+    code: "other_city",
+    feeXaf: null,
+    allowsCashOnDelivery: false,
+    requiresAddress: true,
+    position: 2,
+  },
+  {
+    code: "international",
+    feeXaf: null,
+    allowsCashOnDelivery: false,
+    requiresAddress: true,
+    position: 3,
+  },
+];
+
+const paymentMethodRows = [
+  { code: "mtn_momo", provider: "elgiopay", isActive: true, position: 0 },
+  { code: "orange_money", provider: "elgiopay", isActive: true, position: 1 },
+  { code: "bank_transfer", provider: "manual", isActive: true, position: 2 },
+  { code: "cash_on_delivery", provider: "manual", isActive: true, position: 3 },
+  // Phase 3.
+  { code: "card", provider: "elgiopay", isActive: false, position: 4 },
+] as const;
 
 const descriptions: Record<Texture, { fr: string; en: string }> = {
   afro: {
@@ -213,6 +261,19 @@ async function seed() {
           }),
         ),
       );
+    }
+
+    for (const row of deliveryMethodRows) {
+      await tx
+        .insert(deliveryMethods)
+        .values(row)
+        .onConflictDoUpdate({ target: deliveryMethods.code, set: row });
+    }
+    for (const row of paymentMethodRows) {
+      await tx
+        .insert(paymentMethods)
+        .values(row)
+        .onConflictDoUpdate({ target: paymentMethods.code, set: row });
     }
 
     for (const [key, url] of Object.entries(siteImageUrls)) {

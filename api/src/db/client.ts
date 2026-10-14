@@ -25,3 +25,7 @@ class QueryLogger implements Logger {
 }
 
 export const db = drizzle(pool, { schema, logger: new QueryLogger() });
+
+/** The database or an open transaction: services accept either. */
+export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+export type Db = typeof db | Tx;

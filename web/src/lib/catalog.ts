@@ -15,6 +15,8 @@ export type Product = {
   /** Remaining units when `status` is "lowStock", otherwise null. */
   lowStockQuantity: number | null;
   image: string | null;
+  /** Variant added by "Add to cart" on product cards; null if nothing can be ordered. */
+  defaultSku: string | null;
 };
 
 export type CapSize = "S" | "M" | "L";

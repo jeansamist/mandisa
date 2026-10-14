@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -62,6 +63,12 @@ export default async function LocaleLayout({
             </MotionProvider>
           </SiteDataProvider>
         </NextIntlClientProvider>
+        {/* Journey and click tracking for the back office (vanilla JS). */}
+        <Script
+          src="/mt.js"
+          strategy="afterInteractive"
+          data-endpoint="/api/track"
+        />
       </body>
     </html>
   );

@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
   },
   // Override default ignores of eslint-config-next.
   globalIgnores([
+    // Hand-written browser script (ES5 style, no build step).
+    "public/mt.js",
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
